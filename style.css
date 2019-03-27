@@ -1,3 +1,26 @@
+html * {
+  font-family: 'Source Code Pro', monospace;
+}
+
+body {
+  padding: 10%
+}
+
 .link {
-  color: blue;
+  color: lightblue;
+  text-align: center;
+}
+
+.description {
+  margin: 0 auto;
+  width: 90%;
+  color: black;
+  background-color: white;
+  text-align: center;
+  border-radius: 0%;
+  padding: 5%;
+}
+
+body {
+  background-color: black;
 }
