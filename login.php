@@ -2,5 +2,5 @@
   $hn = 'localhost';
   $un = 'root';
   $pw = '';
-  $db = '';
+  $db = 'users';
 ?>
