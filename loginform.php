@@ -1,5 +1,6 @@
 <?php
   require_once 'login.php';
+  require_once 'tools.php';
   
   $conn = new mysqli($hn, $un, $pw, $db);
   if ($conn->connect_error) die ($conn->connect_error);
@@ -7,10 +8,7 @@
   if (isset($_POST['username']) && isset($_POST['password'])) {
     $username = get_post($conn, 'username');
     $password = get_post($conn, 'password');
-    $query = "INSERT INTO users VALUES".
-            "('$username', '$password')";
-    $result = $conn->query($query);
-    if (!$result) echo "INSERT failed: $query<br>" . $conn->error . "<br><br>";
+    add_user($username, $password);
   }
   
   echo <<<_END
@@ -39,8 +37,4 @@ _END;
   
   $result->close();
   $conn->close();
-  
-  function get_post($conn, $var) {
-    return $conn->real_escape_string($_POST[$var]);
-  }
 ?>
