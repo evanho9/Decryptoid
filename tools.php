@@ -21,14 +21,14 @@
     return true;
   }
   
-  function add_user($username, $password) {
+  function add_user($email, $username, $password) {
     global $hn, $un, $pw, $db;
     $conn = new mysqli($hn, $un, $pw, $db);
     if ($conn->connect_error) die ($conn->connect_error);
     
     $password = salt_and_hash($password);
     $query = "INSERT INTO users VALUES" .
-            "('$username','$password')";
+            "('$email','$username','$password')";
     $result = $conn->query($query);
     if (!$result) echo "INSERT failed. <br>" . $conn->error . "<br>";
     
