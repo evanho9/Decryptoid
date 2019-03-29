@@ -8,8 +8,8 @@
   if ($conn->connect_error) die ($conn->connect_error);
   
   if (isset($_POST['username']) && isset($_POST['password'])) {
-    $username = get_post($conn, 'username');
-    $password = get_post($conn, 'password');
+    $username = get_post($conn, $_POST['username']);
+    $password = get_post($conn, $_POST['password']);
     $hashed_password = salt_and_hash($password);
     $query = "SELECT * FROM users WHERE username='$username' AND password='$hashedpassword'";
     $result = $conn->query($query);

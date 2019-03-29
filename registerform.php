@@ -8,9 +8,9 @@
   if ($conn->connect_error) die ($conn->connect_error);
   
   if (isset($_POST['email'] && isset($_POST['username']) && isset($_POST['password']) ) {
-    $email = get_post($conn, 'email');
-    $username = get_post($conn, 'username');
-    $password = get_post($conn, 'password');
+    $email = get_post($conn, $_POST['email']);
+    $username = get_post($conn, $_POST['username']);
+    $password = get_post($conn, $_POST['password']);
     if (user_exists($username)) {
       echo "Username '$username' exists in the database already.<br>";
     } else {

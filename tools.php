@@ -7,8 +7,10 @@
     return hash('ripemd128', $salt1 . $a . $salt2);
   }
   
-  function get_post($conn, $var) {
-    return $conn->real_escape_string($_POST[$var]);
+  function get_post($conn, $string) {
+    if (get_magic_quotes_gpc())
+      $string = stripcslashes($string);
+    return $conn->real_escape_string($string);
   }
   
   function user_exists($username) {
