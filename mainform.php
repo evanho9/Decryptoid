@@ -1,0 +1,48 @@
+<?php
+  require_once 'cryptotools.php';
+  
+  echo <<<_END
+  <html>
+    <head>
+      <title>Decryptoid Main Page</title>
+      <link rel='stylesheet' href='style.css'>
+      <link rel='shortcut icon' href='assets/favicon.png'>
+    </head>
+    <body>
+_END;
+  if (isset($_POST['textinput'])) {
+      echo <<<_END
+      <div class="loginmessage">
+          <p><a style="color:red">Input receieved!</a></p>
+      </div>
+_END;
+  }
+  
+  if ($_FILES) {
+    if ($_FILES['file']['type'] == 'text/plain') {
+      echo <<<_END
+      <div class="loginmessage">
+          <p><a style="color:red">Correct file type!</a></p>
+      </div>
+_END;
+    }
+  }
+  
+  echo <<<_END
+  <div class="userform">
+  <form method='post' action='mainform.php'>
+    <textarea name="textinput" cols="100" rows="5" style="border: none" style="padding:5px">Enter ciphertext/plaintext here...</textarea>
+    <input type='submit' value='Encrypt/Decrypt'>
+  </form>
+  </div>
+_END;
+  
+  echo <<<_END
+  <div class="userform">
+  <form method='post' action='mainform.php' enctype='multipart/form-data'>
+    Or Select .txt File: <input type='file' name='Filename' size='16'>
+    <input type='submit' value='Upload File'>
+  </form>
+  </div>
+_END;
+?>

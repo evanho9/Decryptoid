@@ -1,28 +1,38 @@
 <?php
   require_once 'login.php';
   require_once 'tools.php';
-  echo "<link rel='stylesheet' href='style.css'>";
-  echo "<link rel='shortcut icon' href='favicon.png;>";
+  echo <<<_END
+  <html>
+    <head>
+      <title>Register Page</title>
+      <link rel='stylesheet' href='style.css'>
+      <link rel='shortcut icon' href='assets/favicon.png'>
+    </head>
+    <body>
+_END;
   
   $conn = new mysqli($hn, $un, $pw, $db);
   if ($conn->connect_error) die ($conn->connect_error);
   
-  if (isset($_POST['email'] && isset($_POST['username']) && isset($_POST['password']) ) {
+  if (isset($_POST['email']) && isset($_POST['username']) && isset($_POST['password'])) {
     $email = get_post($conn, $_POST['email']);
     $username = get_post($conn, $_POST['username']);
     $password = get_post($conn, $_POST['password']);
     if (user_exists($username)) {
-      echo "Username '$username' exists in the database already.<br>";
+      echo <<<_END
+      <div class="loginmessage">
+          <p><a style="color:red">Username is taken!</a> Click <a href="loginform.php" style="color:blue">here</a> to login instead.</p>
+      </div>
+_END;
     } else {
       add_user($email, $username, $password);
-      echo "Successfully registered! <br>";
     }
   }
   
   echo <<<_END
   <div class="userform">
   <form action="registerform.php" method="post"><pre>
-  Email <input type="text" name="email"><br>
+  Email    <input type="text" name="email"><br>
   Username <input type="text" name="username"><br>
   Password <input type="text" name="password"><br>
   <input type="submit" value="Register">

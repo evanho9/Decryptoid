@@ -19,8 +19,9 @@
     if ($conn->connect_error) die ($conn->connect_error);
     $query = "SELECT * FROM users WHERE username=''$username''";
     $result = $conn->query($query);
-    if (!$result) return false;
-    return true;
+    $num_rows = mysqli_num_rows($result);
+    if ($num_rows > 0) return true;
+    else return false;
   }
   
   function add_user($email, $username, $password) {

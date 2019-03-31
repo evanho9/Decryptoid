@@ -4,7 +4,7 @@
     
   }
   
-  function substitution_decrypt() {
+  function substitution_decrypt($key) {
     
   }
   
@@ -12,7 +12,7 @@
     
   }
   
-  function double_transposition_decrypt() {
+  function double_transposition_decrypt($key) {
     
   }
   
@@ -20,7 +20,7 @@
     
   }
   
-  function RC4_decrypt() {
+  function RC4_decrypt($key) {
     
   }
   

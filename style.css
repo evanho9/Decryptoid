@@ -3,18 +3,22 @@ html * {
 }
 
 body {
-  padding: 10%
+  padding: 0%
 }
 
 .main {
-  border-radius: 25px;
+  width: 80%;
+  margin: 0 auto;
+  border-radius: 10px;
   background-color: white;
+  position: relative;
+  top: 50%;
+  transform: translateY(-60%);
 }
 
 .title {
   margin: 0 auto;
-  width: 100%;
-  height:20%;
+  height: 20%;
   color: #666666;
   background-image: url("lock.png");
   background-repeat: no-repeat;
@@ -23,39 +27,57 @@ body {
   text-align: center;
   font-size: 250%;
   line-height: 100%;
-  border-radius: 0%;
   padding-top: 5%;
   padding-bottom: 5%;
 }
 
 .link {
   margin: 0 auto;
-  width: 90%;
+  width: 25%;
   color: blue;
   text-align: center;
-  border-radius: 0%;
-  padding: 0%;
 }
 
 .description {
-  margin: 0 auto;
-  width: 90%;
   color: black;
   text-align: center;
-  border-radius: 0%;
   padding: 5%;
 }
 
-.userform {
+.loginmessage {
+  border-radius: 10px;
   margin: 0 auto;
-  width: 90%;
+  width: 80%;
   color: black;
   background-color: white;
   text-align: center;
-  border-radius: 0%;
-  padding: 5%;
+  padding-top: 5%;
+  padding-bottom: 5%;
+  position: relative;
+  top: 30%;
+  transform: translateY(-50%);
+}
+
+.userform {
+  border-radius: 10px;
+  width: 80%;
+  color: black;
+  background-color: white;
+  text-align: center;
+  margin: 0 auto;
+  padding-top: 5%;
+  padding-bottom: 5%;
+  position: relative;
+  top: 30%;
+  transform: translateY(-60%);
 }
 
 body {
   background-color: black;
 }
+
+textarea { 
+    border-style: none; 
+    border-color: Transparent; 
+    overflow: auto;        
+  }
