@@ -18,6 +18,7 @@ _END;
 _END;
   }
   
+  //TODO FIX THIS
   if ($_FILES) {
     if ($_FILES['file']['type'] == 'text/plain') {
       echo <<<_END
@@ -32,6 +33,14 @@ _END;
   <div class="userform">
   <form method='post' action='mainform.php'>
     <textarea name="textinput" cols="100" rows="5" style="border: none" style="padding:5px">Enter ciphertext/plaintext here...</textarea>
+    <select>
+      <option value="substitution_encrypt">Substitution Encrypt</option>
+      <option value="substitution_decrypt">Substitution Decrypt</option>
+      <option value="double_transposition_encrypt">Double Transposition Encrypt</option>
+      <option value="double_transposition_decrypt">Double Transposition Decrypt</option>
+      <option value="RC4_encrypt">RC4 Encrypt</option>
+      <option value="RC4_decrypt">RC4 Decrypt</option>
+    </select>
     <input type='submit' value='Encrypt/Decrypt'>
   </form>
   </div>
