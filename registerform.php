@@ -9,6 +9,11 @@
       <link rel='shortcut icon' href='assets/favicon.png'>
     </head>
     <body>
+    <div class="header">
+        <h1>Decryptoid. >_</h1>
+        <h1 id="blink">|</h1>
+        <script src="htimer.js"></script>
+      </div>
 _END;
   
   $conn = new mysqli($hn, $un, $pw, $db);

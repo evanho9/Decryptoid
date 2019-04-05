@@ -9,11 +9,18 @@
       <link rel='shortcut icon' href='assets/favicon.png'>
     </head>
     <body>
+      <div class="header">
+        <h1>Decryptoid. >_</h1>
+        <h1 id="blink">|</h1>
+        <script src="htimer.js"></script>
+      </div>
 _END;
-  if (isset($_POST['textinput'])) {
+
+  if (isset($_POST['textinput']) && $_POST['textinput'] != 'Enter ciphertext/plaintext here...') {
       echo <<<_END
       <div class="loginmessage">
-          <p><a style="color:red">Input receieved!</a></p>
+          <p><a style="color:red">Input receieved! {$_POST['cryptotype']} was used to encrypt/decrypt.</a></p>
+          <p>{$_POST['textinput']}</p>
       </div>
 _END;
   }
@@ -33,7 +40,7 @@ _END;
   <div class="userform">
   <form method='post' action='mainform.php'>
     <textarea name="textinput" cols="100" rows="5" style="border: none" style="padding:5px">Enter ciphertext/plaintext here...</textarea>
-    <select>
+    <select name="cryptotype">
       <option value="substitution_encrypt">Substitution Encrypt</option>
       <option value="substitution_decrypt">Substitution Decrypt</option>
       <option value="double_transposition_encrypt">Double Transposition Encrypt</option>
