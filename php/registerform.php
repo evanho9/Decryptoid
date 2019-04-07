@@ -5,14 +5,14 @@
   <html>
     <head>
       <title>Register Page</title>
-      <link rel='stylesheet' href='style.css'>
-      <link rel='shortcut icon' href='assets/favicon.png'>
+      <link rel='stylesheet' href='../css/style.css'>
+      <link rel='shortcut icon' href='../assets/favicon.png'>
     </head>
     <body>
     <div class="header">
         <h1>Decryptoid. >_</h1>
         <h1 id="blink">|</h1>
-        <script src="htimer.js"></script>
+        <script src="../js/htimer.js"></script>
       </div>
 _END;
   

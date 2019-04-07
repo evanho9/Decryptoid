@@ -6,8 +6,8 @@
   <html>
     <head>
       <title>Login Page</title>
-      <link rel='stylesheet' href='style.css'>
-      <link rel='shortcut icon' href='assets/favicon.png'>
+      <link rel='stylesheet' href='../css/style.css'>
+      <link rel='shortcut icon' href='../assets/favicon.png'>
     </head>
     <body>
     <div class="header">

@@ -46,7 +46,7 @@ body {
   margin: 0 auto;
   height: 20%;
   color: #666666;
-  background-image: url("assets/lock.png");
+  background-image: url("../assets/lock.png");
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
