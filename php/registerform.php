@@ -20,9 +20,9 @@ _END;
   if ($conn->connect_error) die ($conn->connect_error);
   
   if (isset($_POST['email']) && isset($_POST['username']) && isset($_POST['password'])) {
-    $email = get_post($conn, $_POST['email']);
-    $username = get_post($conn, $_POST['username']);
-    $password = get_post($conn, $_POST['password']);
+    $email = mysql_fix_string($conn, $_POST['email']);
+    $username = mysql_fix_string($conn, $_POST['username']);
+    $password = mysql_fix_string($conn, $_POST['password']);
     if (user_exists($username)) {
       echo <<<_END
       <div class="loginmessage">
