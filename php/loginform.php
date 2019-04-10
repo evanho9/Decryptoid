@@ -13,7 +13,7 @@
     <div class="header">
         <h1>Decryptoid. >_</h1>
         <h1 id="blink">|</h1>
-        <script src="htimer.js"></script>
+        <script src="../js/htimer.js"></script>
       </div>
 _END;
   
@@ -21,11 +21,16 @@ _END;
   if ($conn->connect_error) die ($conn->connect_error);
   
   if (isset($_POST['username']) && isset($_POST['password'])) {
-    $username = mysql_fix_string($conn, $_POST['username']);
-    $password = mysql_fix_string($conn, $_POST['password']);
+    $username = mysql_entities_fix_string($conn, $_POST['username']);
+    $password = mysql_entities_fix_string($conn, $_POST['password']);
     $hashed_password = salt_and_hash($password);
-    $query = "SELECT * FROM users WHERE username='$username' AND password='$hashed_password'";
-    $result = $conn->query($query);
+    
+    $stmt = $conn->prepare("SELECT * FROM users WHERE username=? AND password=?");
+    $stmt->bind_param('ss', $username, $hashed_password);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $stmt->close();
+    
     $num_rows = mysqli_num_rows($result);
     if ($num_rows > 0) {
       echo '<script>window.location.href = "mainform.php";</script>';

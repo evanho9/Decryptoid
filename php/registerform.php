@@ -20,17 +20,18 @@ _END;
   if ($conn->connect_error) die ($conn->connect_error);
   
   if (isset($_POST['email']) && isset($_POST['username']) && isset($_POST['password'])) {
-    $email = mysql_fix_string($conn, $_POST['email']);
-    $username = mysql_fix_string($conn, $_POST['username']);
-    $password = mysql_fix_string($conn, $_POST['password']);
-    if (user_exists($username)) {
+    $email = mysql_entities_fix_string($conn, $_POST['email']);
+    $username = mysql_entities_fix_string($conn, $_POST['username']);
+    $password = mysql_entities_fix_string($conn, $_POST['password']);
+    if (user_exists($conn, $username)) {
       echo <<<_END
       <div class="loginmessage">
           <p><a style="color:red">Username is taken!</a> Click <a href="loginform.php" style="color:blue">here</a> to login instead.</p>
       </div>
 _END;
     } else {
-      add_user($email, $username, $password);
+      add_user($conn, $email, $username, $password);
+      echo '<script>window.location.href = "loginform.php";</script>';
     }
   }
   
@@ -44,23 +45,6 @@ _END;
   </pre></form>
   </div>
 _END;
-  
-  //Print all the user names and passwords
-  $query = "SELECT * FROM users";
-  $result = $conn->query($query);
-  if (!$result) die ("Database access failed: " . $conn->error . "<br>");
-  $rows = $result->num_rows;
-  for ($i=0; $i<$rows; ++$i) {
-    $result->data_seek($i);
-    $row = $result->fetch_array(MYSQLI_NUM);
-    echo <<<_END
-  <pre>
-  Username $row[0]
-  Password $row[1]
-  </pre>
-_END;
-  }
-  
-  $result->close();
+
   $conn->close();
 ?>

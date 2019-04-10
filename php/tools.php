@@ -7,33 +7,34 @@
     return hash('ripemd128', $salt1 . $a . $salt2);
   }
   
+  function mysql_entities_fix_string($conn, $string) {
+    return htmlentities(mysql_fix_string($conn,$string));
+  }
+  
   function mysql_fix_string($conn, $string) {
     if (get_magic_quotes_gpc())
       $string = stripcslashes($string);
     return $conn->real_escape_string($string);
   }
   
-  function user_exists($username) {
-    global $hn, $un, $pw, $db;
-    $conn = new mysqli($hn, $un, $pw, $db);
-    if ($conn->connect_error) die ($conn->connect_error);
-    $query = "SELECT * FROM users WHERE username=''$username''";
-    $result = $conn->query($query);
+  function user_exists($conn, $username) {
+    $stmt = $conn->prepare("SELECT * FROM users WHERE username=?");
+    $stmt->bind_param('s', $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $stmt->close(); 
     $num_rows = mysqli_num_rows($result);
     if ($num_rows > 0) return true;
     else return false;
   }
   
-  function add_user($email, $username, $password) {
-    global $hn, $un, $pw, $db;
-    $conn = new mysqli($hn, $un, $pw, $db);
-    if ($conn->connect_error) die ($conn->connect_error);
-    
+  function add_user($conn, $email, $username, $password) {
     $password = salt_and_hash($password);
-    $query = "INSERT INTO users VALUES" .
-            "('$email','$username','$password')";
-    $result = $conn->query($query);
+    $stmt = $conn->prepare("INSERT INTO users VALUES(?,?,?)");
+    $stmt->bind_param('sss', $email, $username, $password);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $stmt->close();
     if (!$result) echo "INSERT failed. <br>" . $conn->error . "<br>";
-    
   }
 ?>
