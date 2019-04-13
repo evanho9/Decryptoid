@@ -1,4 +1,5 @@
 <?php
+  require_once 'tools.php';
   require_once 'cryptotools.php';
   
   echo <<<_END
@@ -16,33 +17,38 @@
       </div>
 _END;
 
+  $conn = new mysqli($hn, $un, $pw, $db);
+  if ($conn->connect_error) die ($conn->connect_error);
+
   if (isset($_POST['textinput']) && $_POST['textinput'] != 'Enter ciphertext/plaintext here...' &&
     isset($_POST['ciphertype']) && isset($_POST['encryptordecrypt'])) {
-      //TODO sanitize?
+      $text_box_input = mysql_entities_fix_string($conn, $_POST['textinput']);
+      $result = "Encrypt/decrypt not successful";
       switch ($_POST['ciphertype']) {
         case 'substitution':
           if ($_POST['encryptordecrypt'] == 'encrypt') {
-            substitution_encrypt($to_encrypt, $alphabet);
+            $result = substitution_encrypt($text_box_input, $alphabet);
+            echo $result;
           } else {
-            substitution_decrypt($to_encrypt, $alphabet);
+            $result = substitution_decrypt($text_box_input, $alphabet);
           }
         case 'double_transposition':
           if ($_POST['encryptordecrypt'] == 'encrypt') {
-            double_transposition_encrypt($to_encrypt, $num_rows, $num_cols, $row_perm, $col_perm);
+            $result = double_transposition_encrypt($text_box_input, $num_rows, $num_cols, $row_perm, $col_perm);
           } else {
-            double_transposition_decrypt($to_decrypt, $num_rows, $num_cols, $row_perm, $col_perm);
+            $result = double_transposition_decrypt($text_box_input, $num_rows, $num_cols, $row_perm, $col_perm);
           }
         case 'RC4':
           if ($_POST['encryptordecrypt'] == 'encrypt') {
-            RC4_encrypt($to_encrypt, $key);
+            $result = RC4_encrypt($text_box_input, $key);
           } else {
-            RC4_decrypt($to_decrypt, $key);
+            $result = RC4_decrypt($text_box_input, $key);
           }
       }
       echo <<<_END
       <div class="loginmessage">
-          <p><a style="color:red">Input receieved! {$_POST['ciphertype']} was used to encrypt/decrypt.</a></p>
-          <p>{$_POST['textinput']}</p>
+          <p><a style="color:red">Input receieved, {$_POST['ciphertype']} was used to {$_POST['encryptordecrypt']}.</a></p>
+          <p>{$result}</p>
       </div>
 _END;
   }
