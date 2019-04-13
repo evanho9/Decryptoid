@@ -7,6 +7,7 @@
   echo substitution_decrypt("xyz", $test_alphabet);
   */
   
+  /*
   print "<pre>";
   print_r(double_transposition_encrypt("123456789", 3, 3, "0,2,1", "2,1,0"));
   print "</pre>";
@@ -14,6 +15,7 @@
   print "<pre>";
   print_r(double_transposition_decrypt("321987654", 3, 3, "0,2,1", "2,1,0"));
   print "</pre>";
+  */
   
   function substitution_encrypt($to_encrypt, $alphabet) {
     $to_encrypt = str_split($to_encrypt);
