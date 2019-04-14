@@ -19,6 +19,38 @@ _END;
   
   $conn = new mysqli($hn, $un, $pw, $db);
   if ($conn->connect_error) die ($conn->connect_error);
+  /*
+  if (isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW'])) {
+    $username_temp = mysql_entities_fix_string($conn, $_SERVER['PHP_AUTH_USER']);
+    $password_temp = mysql_entities_fix_string($conn, $_SERVER['PHP_AUTH_PW']);
+    
+    $stmt = $conn->prepare("SELECT * FROM users WHERE username=?");
+    $stmt->bind_param('s', $username);
+    $stmt->execute();
+    
+    $result = $stmt->get_result();
+    $stmt->close();
+    if (!result) die ($conn->error);
+    elseif ($result->num_rows > 0 ) {
+      $row = $result->fetch_array(MYSQLI_ASSOC);
+      $result->close();
+      $token = saltandhash($password_temp);
+      if ($token == $row['password']) {
+        echo '<script>window.location.href = "mainform.php";</script>';
+      } 
+    } else {
+        echo <<<_END
+        <div class="loginmessage">
+            <p><a style="color:red">Incorrect username or password!</a> Click <a href="registerform.php" style="color:blue">here</a> to register instead.</p>
+        </div>
+_END;
+    }
+  } else {
+      header('WWW-Authenticate: Basic realm="Restricted Section"');
+      header('HTTP/1.0 401 Unauthorized');
+      die("Please enter your username and password");
+  }
+  */
   
   if (isset($_POST['username']) && isset($_POST['password'])) {
     $username = mysql_entities_fix_string($conn, $_POST['username']);
@@ -54,7 +86,6 @@ _END;
     </pre></form>
   </div>
 _END;
-  
   
   $conn->close();
   
