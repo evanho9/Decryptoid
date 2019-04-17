@@ -20,7 +20,7 @@ _END;
   $conn = new mysqli($hn, $un, $pw, $db);
   if ($conn->connect_error) die ($conn->connect_error);
 
-  if (isset($_POST['textinput']) && $_POST['textinput'] != 'Enter ciphertext/plaintext here...' &&
+  if (isset($_POST['textboxbutton']) && isset($_POST['textinput']) && $_POST['textinput'] != 'Enter ciphertext/plaintext here...' &&
     isset($_POST['ciphertype']) && isset($_POST['encryptordecrypt'])) {
       $text_box_input = mysql_entities_fix_string($conn, $_POST['textinput']);
       $result = "Encrypt/decrypt not successful";
@@ -54,7 +54,7 @@ _END;
   }
   
   //TODO FIX THIS
-  if ($_FILES) {
+  if (isset($_POST['inputfilebutton']) && $_FILES) {
     if ($_FILES['file']['type'] == 'text/plain') {
       echo <<<_END
       <div class="loginmessage">
@@ -75,7 +75,7 @@ _END;
     </select>
     <input type='radio' name='encryptordecrypt' value='encrypt'>Encrypt
     <input type='radio' name='encryptordecrypt' value='decrypt'>Decrypt
-    <input type='submit' value='Submit'>
+    <input type='submit' name='textboxbutton' value='Submit'>
   </form>
   </div>
 _END;
@@ -84,7 +84,7 @@ _END;
   <div class="userform">
   <form method='post' action='mainform.php' enctype='multipart/form-data'>
     Or Select .txt File: <input type='file' name='Filename' size='16'>
-    <input type='submit' value='Upload File'>
+    <input type='submit' name='inputfilebutton' value='Upload File'>
   </form>
   </div>
 _END;

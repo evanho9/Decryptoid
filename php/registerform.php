@@ -18,8 +18,10 @@ _END;
   
   $conn = new mysqli($hn, $un, $pw, $db);
   if ($conn->connect_error) die ($conn->connect_error);
+  create_database($conn);
+  create_userdata_table($conn);
   
-  if (isset($_POST['email']) && isset($_POST['username']) && isset($_POST['password'])) {
+  if (isset($_POST['loginbutton']) && isset($_POST['email']) && isset($_POST['username']) && isset($_POST['password'])) {
     $email = mysql_entities_fix_string($conn, $_POST['email']);
     $username = mysql_entities_fix_string($conn, $_POST['username']);
     $password = mysql_entities_fix_string($conn, $_POST['password']);
@@ -40,7 +42,7 @@ _END;
   <form action="registerform.php" method="post"><pre>
   Email    <input type="text" name="email"><br>
   Username <input type="text" name="username"><br>
-  Password <input type="text" name="password"><br>
+  Password <input type="password" name="password"><br>
   <input type="submit" value="Register">
   </pre></form>
   </div>

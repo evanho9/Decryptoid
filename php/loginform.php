@@ -19,6 +19,9 @@ _END;
   
   $conn = new mysqli($hn, $un, $pw, $db);
   if ($conn->connect_error) die ($conn->connect_error);
+  create_database($conn);
+  create_userdata_table($conn);
+  
   /*
   if (isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW'])) {
     $username_temp = mysql_entities_fix_string($conn, $_SERVER['PHP_AUTH_USER']);
@@ -52,11 +55,12 @@ _END;
   }
   */
   
-  if (isset($_POST['username']) && isset($_POST['password'])) {
+  if (isset($_POST['loginbutton']) && isset($_POST['username']) && isset($_POST['password'])) {
     $username = mysql_entities_fix_string($conn, $_POST['username']);
     $password = mysql_entities_fix_string($conn, $_POST['password']);
     $hashed_password = salt_and_hash($password);
     
+    //TODO maybe change password matching to outside
     $stmt = $conn->prepare("SELECT * FROM users WHERE username=? AND password=?");
     $stmt->bind_param('ss', $username, $hashed_password);
     $stmt->execute();
@@ -81,8 +85,8 @@ _END;
   <div class="userform">
     <form action="loginform.php" method="post"><pre>
     Username <input type="text" name="username"><br>
-    Password <input type="text" name="password"><br>
-    <input type="submit" value="Login">
+    Password <input type="password" name="password"><br>
+    <input type="submit" name="loginbutton" value="Login">
     </pre></form>
   </div>
 _END;
