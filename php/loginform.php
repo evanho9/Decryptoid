@@ -2,6 +2,15 @@
   require_once 'login.php';
   require_once 'tools.php';
   
+  session_start();
+  
+  if (isset($_SESSION['check']) && $_SESSION['check'] != hash('ripemd128', $_SERVER['REMOTE_ADDR'] .$_SERVER['HTTP_USER_AGENT']))
+    different_user();
+  if (!isset($_SESSION['initiated'])) {
+    session_regenerate_id();
+    $_SESSION['initiated'] = 1;
+  }
+  
   echo <<<_END
   <html>
     <head>
@@ -20,7 +29,7 @@ _END;
   $conn = new mysqli($hn, $un, $pw, $db);
   if ($conn->connect_error) die ($conn->connect_error);
   create_database($conn);
-  create_userdata_table($conn);
+  create_usercredentials_table($conn);
   
   /*
   if (isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW'])) {
@@ -55,30 +64,40 @@ _END;
   }
   */
   
-  if (isset($_POST['loginbutton']) && isset($_POST['username']) && isset($_POST['password'])) {
+    //Login logic
+  if (!isset($_SESSION['loggedin']) && isset($_POST['loginbutton']) && !empty($_POST['username']) && !empty($_POST['password'])) {
     $username = mysql_entities_fix_string($conn, $_POST['username']);
     $password = mysql_entities_fix_string($conn, $_POST['password']);
-    $hashed_password = salt_and_hash($password);
     
-    //TODO maybe change password matching to outside
-    $stmt = $conn->prepare("SELECT * FROM users WHERE username=? AND password=?");
-    $stmt->bind_param('ss', $username, $hashed_password);
+    $stmt = $conn->prepare("SELECT * FROM usercredentials WHERE username=?");
+    $stmt->bind_param('s', $username);
     $stmt->execute();
     $result = $stmt->get_result();
     $stmt->close();
     
-    $num_rows = mysqli_num_rows($result);
-    if ($num_rows > 0) {
-      echo '<script>window.location.href = "mainform.php";</script>';
-    }
-    else {
+    if ($result->num_rows > 0) {
+      $row = $result->fetch_array(MYSQLI_ASSOC);
+      $result->close();
+      $token = salt_and_hash($password);
+      if ($token == $row['password']) {
+        $_SESSION['username'] = $username;
+        $_SESSION['loggedin'] = true;
+        $_SESSION['check'] = hash('ripemd128', $_SERVER['REMOTE_ADDR'] .$_SERVER['HTTP_USER_AGENT']);
+        echo '<script>window.location.href = "mainform.php";</script>';
+      } else {
+          echo <<<_END
+      <div class="loginmessage">
+          <p><a style="color:red">Incorrect username or password!</a> Click <a href="registerform.php" style="color:blue">here</a> to register instead.</p>
+      </div>
+_END;
+      }
+    } else {
       echo <<<_END
       <div class="loginmessage">
           <p><a style="color:red">Incorrect username or password!</a> Click <a href="registerform.php" style="color:blue">here</a> to register instead.</p>
       </div>
 _END;
     }
-    $result->close();
   }
   
   echo <<<_END
@@ -91,7 +110,8 @@ _END;
   </div>
 _END;
   
+  //End duties
   $conn->close();
-  
+  $_POST = array();
   echo "</body></html>";
 ?>

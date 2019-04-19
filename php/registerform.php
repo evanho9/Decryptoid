@@ -1,6 +1,14 @@
 <?php
   require_once 'login.php';
   require_once 'tools.php';
+  
+  if (isset($_SESSION['check']) && $_SESSION['check'] != hash('ripemd128', $_SERVER['REMOTE_ADDR'] .$_SERVER['HTTP_USER_AGENT']))
+    different_user();
+  if (!isset($_SESSION['initiated'])) {
+    session_regenerate_id();
+    $_SESSION['initiated'] = 1;
+  }
+  
   echo <<<_END
   <html>
     <head>
@@ -19,9 +27,9 @@ _END;
   $conn = new mysqli($hn, $un, $pw, $db);
   if ($conn->connect_error) die ($conn->connect_error);
   create_database($conn);
-  create_userdata_table($conn);
+  create_usercredentials_table($conn);
   
-  if (isset($_POST['loginbutton']) && isset($_POST['email']) && isset($_POST['username']) && isset($_POST['password'])) {
+  if (isset($_POST['registerbutton']) && !empty($_POST['email']) && !empty($_POST['username']) && !empty($_POST['password'])) {
     $email = mysql_entities_fix_string($conn, $_POST['email']);
     $username = mysql_entities_fix_string($conn, $_POST['username']);
     $password = mysql_entities_fix_string($conn, $_POST['password']);
@@ -43,10 +51,13 @@ _END;
   Email    <input type="text" name="email"><br>
   Username <input type="text" name="username"><br>
   Password <input type="password" name="password"><br>
-  <input type="submit" value="Register">
+  <input type="submit" name="registerbutton" value="Register">
   </pre></form>
   </div>
 _END;
 
+  //End duties
   $conn->close();
+  $_POST = array();
+  echo "</body></html>";
 ?>

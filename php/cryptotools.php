@@ -17,11 +17,31 @@
   print "</pre>";
   */
   
+  /*
+  print_r(string_to_alphabet_map("dzprjqnucwtayblshgvmfxekio"));
+  */
+  
+  function string_to_alphabet_map($string) {
+    $res_map = array("a" => "A", "b" => "B", "c" => "C", "d" => "D", "e" => "E", "f" => "F",
+                     "g" => "G", "h" => "H", "i" => "I", "j" => "J", "k" => "K", "l" => "L",
+                     "m" => "M", "n" => "N", "o" => "O", "p" => "P", "q" => "Q", "r" => "R",
+                     "s" => "S", "t" => "T", "u" => "U", "v" => "V", "w" => "W", "x" => "X",
+                     "y" => "Y", "z" => "Z");
+    $keys = array_keys($res_map);
+    for ($i=0; $i<26; $i++) {
+      if ($string[$i] != null)
+        $res_map[$keys[$i]] = strtoupper($string[$i]);
+      else
+        $res_map[$keys[$i]] = "*";
+    }
+    return $res_map;
+  }
+  
   function substitution_encrypt($to_encrypt, $alphabet) {
     $to_encrypt = str_split($to_encrypt);
     $res = str_repeat("*", sizeOf($to_encrypt));
     for ($i=0; $i<sizeOf($to_encrypt); $i++) {
-      if ($res[$i] !== " ")
+      if ($res[$i] != " ")
         $res[$i] = $alphabet[$to_encrypt[$i]];
     }
     return $res;

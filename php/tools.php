@@ -9,12 +9,12 @@
     $conn->select_db($db);
   }
   
-  function create_userdata_table($conn) {
-    $query = "SHOW TABLES LIKE 'users'";
+  function create_usercredentials_table($conn) {
+    $query = "SHOW TABLES LIKE 'usercredentials'";
     $result = $conn->query($query);
     if ($result) {
       if ($result->num_rows < 1) {
-        $query = "CREATE TABLE users (
+        $query = "CREATE TABLE usercredentials (
                     email VARCHAR(64) NOT NULL,
                     username VARCHAR(32) NOT NULL PRIMARY KEY,
                     password VARCHAR(64) NOT NULL
@@ -23,6 +23,34 @@
         if (!$result) die ("Database access failed: " . $conn->error);
       }
     } else if (!$result) die ("Database access failed: " . $conn->error);
+  }
+  
+  function create_userfiles_table($conn) {
+    $query = "SHOW TABLES LIKE 'userfiles'";
+    $result = $conn->query($query);
+    if ($result) {
+      if ($result->num_rows < 1) {
+        $query = "CREATE TABLE userfiles (
+                     owner VARCHAR(32) NOT NULL,
+                     name VARCHAR(32) NOT NULL,
+                     textfilecontent BLOB,
+                     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
+                     ) ENGINE MyISAM";
+        $result = $conn->query($query);
+        if (!$result) die ("Database access failed: " . $conn->error);
+      }
+    } else if (!$result) die ("Database access failed: " . $conn->error);
+  }
+  
+  function different_user() {
+    destroy_session_and_data();
+  }
+  
+  function destroy_session_and_data() {
+    //session_start();
+    $_SESSION = array();
+    setcookie(session_name(), '', time()-2592000, '/');
+    session_destroy();
   }
   
   function salt_and_hash($a) {
@@ -42,7 +70,7 @@
   }
   
   function user_exists($conn, $username) {
-    $stmt = $conn->prepare("SELECT * FROM users WHERE username=?");
+    $stmt = $conn->prepare("SELECT * FROM usercredentials WHERE username=?");
     $stmt->bind_param('s', $username);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -54,7 +82,7 @@
   
   function add_user($conn, $email, $username, $password) {
     $password = salt_and_hash($password);
-    $stmt = $conn->prepare("INSERT INTO users VALUES(?,?,?)");
+    $stmt = $conn->prepare("INSERT INTO usercredentials VALUES(?,?,?)");
     $stmt->bind_param('sss', $email, $username, $password);
     $stmt->execute();
     $result = $stmt->get_result();
