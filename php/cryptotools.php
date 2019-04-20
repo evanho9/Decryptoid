@@ -9,11 +9,11 @@
   
   /*
   print "<pre>";
-  print_r(double_transposition_encrypt("123456789", 3, 3, "0,2,1", "2,1,0"));
+  print_r(double_transposition_encrypt("123456789", 3, 3, "(0,2,1)", "(2,1,0)"));
   print "</pre>";
   
   print "<pre>";
-  print_r(double_transposition_decrypt("321987654", 3, 3, "0,2,1", "2,1,0"));
+  print_r(double_transposition_decrypt("321987654", 3, 3, "(0,2,1)", "(2,1,0)"));
   print "</pre>";
   */
   
@@ -41,8 +41,10 @@
     $to_encrypt = str_split($to_encrypt);
     $res = str_repeat("*", sizeOf($to_encrypt));
     for ($i=0; $i<sizeOf($to_encrypt); $i++) {
-      if ($res[$i] != " ")
-        $res[$i] = $alphabet[$to_encrypt[$i]];
+      if ($res[$i] != ' ' && $res[$i] != null && $to_encrypt[$i] != null) {
+        if ($to_encrypt[$i] != null && $alphabet[$to_encrypt[$i]] != null && $alphabet[$to_encrypt[$i]] != ' ')
+          $res[$i] = $alphabet[$to_encrypt[$i]];
+      }
     }
     return $res;
   }
@@ -57,7 +59,18 @@
     return $res;
   }
   
-  function double_transposition_encrypt($to_encrypt, $num_rows, $num_cols, $row_perm, $col_perm) {
+  function double_transposition_encrypt($to_encrypt,$row_perm, $col_perm) {  
+    $row_perm = str_replace('(', '', $row_perm);
+    $row_perm = str_replace(')', '', $row_perm);
+    $col_perm = str_replace('(', '', $row_perm);
+    $col_perm = str_replace(')', '', $row_perm);
+    $row_perm = str_replace(' ', '', $row_perm);
+    $row_perm = explode(',', $row_perm);
+    $num_rows = sizeof($row_perm);
+    $col_perm = str_replace(' ', '', $col_perm);
+    $col_perm = explode(',', $col_perm);
+    $num_cols = sizeof($col_perm);
+    
     $matrix = array();
     $to_encrypt_index = 0;
     for ($i=0; $i<$num_rows; $i++) {
@@ -66,10 +79,6 @@
         $to_encrypt_index++;
       }
     }
-    $row_perm = str_replace(' ', '', $row_perm);
-    $row_perm = explode(',', $row_perm);
-    $col_perm = str_replace(' ', '', $col_perm);
-    $col_perm = explode(',', $col_perm);
     
     $temp_matrix = array();
     for ($i=0; $i<$num_rows; $i++) {
@@ -84,7 +93,18 @@
     return $res_matrix;
   }
   
-  function double_transposition_decrypt($to_decrypt, $num_rows, $num_cols, $row_perm, $col_perm) {
+  function double_transposition_decrypt($to_decrypt, $row_perm, $col_perm) {
+    $row_perm = str_replace('(', '', $row_perm);
+    $row_perm = str_replace(')', '', $row_perm);
+    $col_perm = str_replace('(', '', $row_perm);
+    $col_perm = str_replace(')', '', $row_perm);
+    $row_perm = str_replace(' ', '', $row_perm);
+    $row_perm = explode(',', $row_perm);
+    $num_rows = sizeof($row_perm);
+    $col_perm = str_replace(' ', '', $col_perm);
+    $col_perm = explode(',', $col_perm);
+    $num_cols = sizeof($col_perm);
+    
     $matrix = array();
     $to_decrypt_index = 0;
     for ($i=0; $i<$num_rows; $i++) {
@@ -93,10 +113,6 @@
         $to_decrypt_index++;
       }
     }
-    $row_perm = str_replace(' ', '', $row_perm);
-    $row_perm = explode(',', $row_perm);
-    $col_perm = str_replace(' ', '', $col_perm);
-    $col_perm = explode(',', $col_perm);
     
     $temp_matrix = array();
     for ($i=0; $i<$num_rows; $i++) {

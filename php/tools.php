@@ -42,6 +42,15 @@
     } else if (!$result) die ("Database access failed: " . $conn->error);
   }
   
+  function get_text_files_of_user($conn, $user) {
+    $stmt = $conn->prepare("SELECT * FROM userfiles WHERE owner=?");
+    $stmt->bind_param('s', $user);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $stmt->close();
+    return $result;
+  }
+  
   function different_user() {
     destroy_session_and_data();
   }
@@ -57,16 +66,6 @@
     $salt1 = "^m%1";
     $salt2 = "7u^w";
     return hash('ripemd128', $salt1 . $a . $salt2);
-  }
-  
-  function mysql_entities_fix_string($conn, $string) {
-    return htmlentities(mysql_fix_string($conn,$string));
-  }
-  
-  function mysql_fix_string($conn, $string) {
-    if (get_magic_quotes_gpc())
-      $string = stripcslashes($string);
-    return $conn->real_escape_string($string);
   }
   
   function user_exists($conn, $username) {
@@ -88,5 +87,15 @@
     $result = $stmt->get_result();
     $stmt->close();
     if (!$result) echo "INSERT failed. <br>" . $conn->error . "<br>";
+  }
+    
+  function mysql_entities_fix_string($conn, $string) {
+    return htmlentities(mysql_fix_string($conn,$string));
+  }
+  
+  function mysql_fix_string($conn, $string) {
+    if (get_magic_quotes_gpc())
+      $string = stripcslashes($string);
+    return $conn->real_escape_string($string);
   }
 ?>

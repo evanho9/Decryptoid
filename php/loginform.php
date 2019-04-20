@@ -52,7 +52,7 @@ _END;
       } 
     } else {
         echo <<<_END
-        <div class="loginmessage">
+        <div class="message">
             <p><a style="color:red">Incorrect username or password!</a> Click <a href="registerform.php" style="color:blue">here</a> to register instead.</p>
         </div>
 _END;
@@ -86,14 +86,14 @@ _END;
         echo '<script>window.location.href = "mainform.php";</script>';
       } else {
           echo <<<_END
-      <div class="loginmessage">
+      <div class="message">
           <p><a style="color:red">Incorrect username or password!</a> Click <a href="registerform.php" style="color:blue">here</a> to register instead.</p>
       </div>
 _END;
       }
     } else {
       echo <<<_END
-      <div class="loginmessage">
+      <div class="message">
           <p><a style="color:red">Incorrect username or password!</a> Click <a href="registerform.php" style="color:blue">here</a> to register instead.</p>
       </div>
 _END;

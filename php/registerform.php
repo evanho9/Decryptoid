@@ -35,7 +35,7 @@ _END;
     $password = mysql_entities_fix_string($conn, $_POST['password']);
     if (user_exists($conn, $username)) {
       echo <<<_END
-      <div class="loginmessage">
+      <div class="message">
           <p><a style="color:red">Username is taken!</a> Click <a href="loginform.php" style="color:blue">here</a> to login instead.</p>
       </div>
 _END;

@@ -32,7 +32,7 @@ _END;
     //destroy_session_and_data();
   } else {
       echo <<<_END
-      <div class="loginmessage">
+      <div class="message">
           <p><a style="color:red">Session not valid!</a> Click <a href="loginform.php" style="color:blue">here</a> to login!</p>
       </div>
 _END;
@@ -42,49 +42,50 @@ _END;
   if ($conn->connect_error) die ($conn->connect_error);
 
   if (isset($_POST['textboxbutton']) && !empty($_POST['textinput']) && $_POST['textinput'] != 'Enter ciphertext/plaintext here...' &&
-    isset($_POST['ciphertype']) && isset($_POST['encryptordecrypt'])) {
+      isset($_POST['ciphertype']) && isset($_POST['encryptordecrypt'])) {
       $text_box_input = mysql_entities_fix_string($conn, $_POST['textinput']);
-      $alphabet = string_to_alphabet_map(mysql_entities_fix_string($conn, $_POST['key']));
+      
+      
       $result = "Encrypt/decrypt not successful";
       switch ($_POST['ciphertype']) {
         case 'substitution':
+          $alphabet = string_to_alphabet_map(mysql_entities_fix_string($conn, $_POST['key']));
           if ($_POST['encryptordecrypt'] == 'encrypt') {
             $result = substitution_encrypt($text_box_input, $alphabet);
-            echo <<<_END
-      <div class="loginmessage">
-          <p><a style="color:red">Input receieved, {$_POST['ciphertype']} was used to {$_POST['encryptordecrypt']}.</a></p>
-          <p>{$result}</p>
-      </div>
-_END;
           } else {
             $result = substitution_decrypt($text_box_input, $alphabet);
-            echo <<<_END
-      <div class="loginmessage">
-          <p><a style="color:red">Input receieved, {$_POST['ciphertype']} was used to {$_POST['encryptordecrypt']}.</a></p>
-          <p>{$result}</p>
-      </div>
-_END;
           }
+          break;
         case 'double_transposition':
+          $row_perm = mysql_entities_fix_string($conn, $_POST['rowperm']);
+          $col_perm = mysql_entities_fix_string($conn, $_POST['colperm']);
           if ($_POST['encryptordecrypt'] == 'encrypt') {
-            $result = double_transposition_encrypt($text_box_input, $num_rows, $num_cols, $row_perm, $col_perm);
+            $result = double_transposition_encrypt($text_box_input, $row_perm, $col_perm);
           } else {
-            $result = double_transposition_decrypt($text_box_input, $num_rows, $num_cols, $row_perm, $col_perm);
+            $result = double_transposition_decrypt($text_box_input, $row_perm, $col_perm);
           }
+          break;
         case 'RC4':
           if ($_POST['encryptordecrypt'] == 'encrypt') {
             $result = RC4_encrypt($text_box_input, $key);
           } else {
             $result = RC4_decrypt($text_box_input, $key);
           }
+          break;
       }
+      echo <<<_END
+      <div class="message">
+          <p><a style="color:red">Input receieved, {$_POST['ciphertype']} was used to {$_POST['encryptordecrypt']}.</a></p>
+          <p>{$result}</p>
+      </div>
+_END;
   }
   
   //TODO FIX THIS
   if (isset($_POST['inputfilebutton']) && $_FILES) {
     if ($_FILES['file']['type'] == 'text/plain') {
       echo <<<_END
-      <div class="loginmessage">
+      <div class="message">
           <p><a style="color:red">Correct file type!</a></p>
       </div>
 _END;
@@ -107,6 +108,8 @@ _END;
     <input type='submit' name='textboxbutton' value='Submit'>
     <br>
     Key: <input id="key" name="key" size="27" maxchars="26" value="abcdefghijklmnopqrstuvwxyz" type="text">
+    Row Permutation: <input id='rowperm' name='rowperm' value='(1,2,3)' type='text'>
+    Column Permutation: <input id="colperm" name="colperm" value="(1,2,3)" type="text">
     <input name="generateKey" value="Generate Random Key" onclick="GenRandKey()" type="button">
   </form>
   </div>
