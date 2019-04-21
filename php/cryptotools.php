@@ -9,11 +9,11 @@
   
   /*
   print "<pre>";
-  print_r(double_transposition_encrypt("123456789", 3, 3, "(0,2,1)", "(2,1,0)"));
+  print_r(double_transposition_encrypt("123456789", "(0,2,1)", "(2,1,0)"));
   print "</pre>";
   
   print "<pre>";
-  print_r(double_transposition_decrypt("321987654", 3, 3, "(0,2,1)", "(2,1,0)"));
+  print_r(double_transposition_decrypt("123456789", "(0,2,1)", "(2,1,0)"));
   print "</pre>";
   */
   
@@ -59,11 +59,11 @@
     return $res;
   }
   
-  function double_transposition_encrypt($to_encrypt,$row_perm, $col_perm) {  
+  function double_transposition($string, $row_perm, $col_perm) {  
     $row_perm = str_replace('(', '', $row_perm);
     $row_perm = str_replace(')', '', $row_perm);
-    $col_perm = str_replace('(', '', $row_perm);
-    $col_perm = str_replace(')', '', $row_perm);
+    $col_perm = str_replace('(', '', $col_perm);
+    $col_perm = str_replace(')', '', $col_perm);
     $row_perm = str_replace(' ', '', $row_perm);
     $row_perm = explode(',', $row_perm);
     $num_rows = sizeof($row_perm);
@@ -75,66 +75,68 @@
     $to_encrypt_index = 0;
     for ($i=0; $i<$num_rows; $i++) {
       for ($j=0; $j<$num_cols; $j++) {
-        $matrix[$i][$j] = $to_encrypt[$to_encrypt_index];
+        $matrix[$i][$j] = $string[$to_encrypt_index];
         $to_encrypt_index++;
       }
     }
     
+    
     $temp_matrix = array();
     for ($i=0; $i<$num_rows; $i++) {
-      $temp_matrix[$i] = $matrix[$row_perm[$i]];
+      for ($j=0; $j<$num_cols; $j++) {
+        $temp_matrix[$i][$j] = $matrix[$row_perm[$i]][$j];
+      }
     }
+    
     $res_matrix = array();
     for ($i=0; $i<$num_rows; $i++) {
       for ($j=0; $j<$num_cols; $j++) {
         $res_matrix[$i][$j] = $temp_matrix[$i][$col_perm[$j]];
       }
     }
-    return $res_matrix;
-  }
-  
-  function double_transposition_decrypt($to_decrypt, $row_perm, $col_perm) {
-    $row_perm = str_replace('(', '', $row_perm);
-    $row_perm = str_replace(')', '', $row_perm);
-    $col_perm = str_replace('(', '', $row_perm);
-    $col_perm = str_replace(')', '', $row_perm);
-    $row_perm = str_replace(' ', '', $row_perm);
-    $row_perm = explode(',', $row_perm);
-    $num_rows = sizeof($row_perm);
-    $col_perm = str_replace(' ', '', $col_perm);
-    $col_perm = explode(',', $col_perm);
-    $num_cols = sizeof($col_perm);
     
-    $matrix = array();
-    $to_decrypt_index = 0;
+    $res = '';
+    $res_index = 0;
     for ($i=0; $i<$num_rows; $i++) {
       for ($j=0; $j<$num_cols; $j++) {
-        $matrix[$i][$j] = $to_decrypt[$to_decrypt_index];
-        $to_decrypt_index++;
+        if ($res_matrix[$i][$j] != ' ' && $res_matrix[$i][$j] != null)
+          $res[$res_index] = $res_matrix[$i][$j];
+        else 
+          $res[$res_index] = '*';
+        $res_index++;
       }
     }
-    
-    $temp_matrix = array();
-    for ($i=0; $i<$num_rows; $i++) {
-      for ($j=0; $j<$num_cols; $j++) {
-        $temp_matrix[$i][$j] = $matrix[$i][$col_perm[$j]];
-      }
-    }
-    
-    $res_matrix = array();
-    for ($i=0; $i<$num_rows; $i++) {
-      $res_matrix[$i] = $temp_matrix[$row_perm[$i]];
-    }
-    
-    return $res_matrix;
+    return $res;
   }
   
-  function RC4_encrypt($to_encrypt, $key) {
-    
-  }
-  
-  function RC4_decrypt($to_decrypt, $key) {
-    
+  function RC4($string, $key) {
+    $s = array();
+    $t = array();
+    for ($i=0; $i<256; $i++) {
+      $s[$i] = $i;
+      $t[$i] = ord($key[$i % strlen($key)]);
+    }
+    $temp = 0;
+    for ($i=0; $i<256; $i++) {
+      $temp = ($temp + $s[$i] + $t[$i]) % 256;
+      $swap_temp = $s[$i];
+      $s[$i] = $s[$temp];
+      $s[$temp] = $swap_temp;
+    }
+    $i = 0;
+    $j = 0;
+    $res = '';
+    for ($k=0; $k<strlen($string); $k++) {
+      $i = ($i+1) % 256;
+      $j = ($j+1) % 256;
+      $swap_temp = $s[$i];
+      $s[$i] = $s[$j];
+      $s[$j] = $swap_temp;
+      $t = ($s[$i] + $s[$k]) % 256;
+      $val = $s[$t];
+      $res .= $string[$k] ^ chr($val);
+    }
+    return $res;
   }
   
 ?>

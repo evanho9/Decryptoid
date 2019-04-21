@@ -56,20 +56,21 @@ _END;
             $result = substitution_decrypt($text_box_input, $alphabet);
           }
           break;
-        case 'double_transposition':
+        case 'double transposition':
           $row_perm = mysql_entities_fix_string($conn, $_POST['rowperm']);
           $col_perm = mysql_entities_fix_string($conn, $_POST['colperm']);
           if ($_POST['encryptordecrypt'] == 'encrypt') {
-            $result = double_transposition_encrypt($text_box_input, $row_perm, $col_perm);
+            $result = double_transposition($text_box_input, $row_perm, $col_perm);
           } else {
-            $result = double_transposition_decrypt($text_box_input, $row_perm, $col_perm);
+            $result = double_transposition($text_box_input, $row_perm, $col_perm);
           }
           break;
         case 'RC4':
+          $key = mysql_entities_fix_string($conn, $_POST['key']);
           if ($_POST['encryptordecrypt'] == 'encrypt') {
-            $result = RC4_encrypt($text_box_input, $key);
+            $result = RC4($text_box_input, $key);
           } else {
-            $result = RC4_decrypt($text_box_input, $key);
+            $result = RC4($text_box_input, $key);
           }
           break;
       }
@@ -96,20 +97,20 @@ _END;
     echo <<<_END
   <div class="userform">
   <form method='post' action='mainform.php'>
-    <textarea name="textinput" cols="100" rows="5" style="border: none" style="padding:5px">Enter ciphertext/plaintext here...</textarea>
+    <textarea name="textinput" cols="100" rows="5" style="border: none" style="padding:5px">Enter plaintext/ciphertext here...</textarea>
     <br>
     <select id="cipherselector" name="ciphertype">
       <option value="substitution">Substitution</option>
-      <option value="double_transposition">Double Transposition</option>
+      <option value="double transposition">Double Transposition</option>
       <option value="RC4">RC4</option>
     </select>
-    <input type='radio' name='encryptordecrypt' value='encrypt'>Encrypt
+    <input type='radio' name='encryptordecrypt' checked="checked" value='encrypt'>Encrypt
     <input type='radio' name='encryptordecrypt' value='decrypt'>Decrypt
     <input type='submit' name='textboxbutton' value='Submit'>
     <br>
     Key: <input id="key" name="key" size="27" maxchars="26" value="abcdefghijklmnopqrstuvwxyz" type="text">
-    Row Permutation: <input id='rowperm' name='rowperm' value='(1,2,3)' type='text'>
-    Column Permutation: <input id="colperm" name="colperm" value="(1,2,3)" type="text">
+    Row Permutation: <input id='rowperm' name='rowperm' value='(0,1,2)' type='text'>
+    Column Permutation: <input id="colperm" name="colperm" value="(0,1,2,3)" type="text">
     <input name="generateKey" value="Generate Random Key" onclick="GenRandKey()" type="button">
   </form>
   </div>
