@@ -10,13 +10,16 @@
     session_regenerate_id();
     $_SESSION['initiated'] = 1;
   }
+  /*
   
+  */
   echo <<<_END
   <html>
     <head>
       <title>Decryptoid Main Page</title>
       <link rel='stylesheet' href='../css/style.css'>
       <link rel='shortcut icon' href='../assets/favicon.png'>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     </head>
     <body>
       <div class="header">
@@ -26,6 +29,7 @@
         <script src="../js/control.js"></script>
       </div>
 _END;
+  header('Content-Type: text/html; charset=utf-8');
   
   if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true ) {
     //$logged_in = true;
@@ -68,9 +72,9 @@ _END;
         case 'RC4':
           $key = mysql_entities_fix_string($conn, $_POST['key']);
           if ($_POST['encryptordecrypt'] == 'encrypt') {
-            $result = RC4($text_box_input, $key);
+            $result = utf8_encode(RC4($text_box_input, $key));
           } else {
-            $result = RC4($text_box_input, $key);
+            $result = utf8_encode(RC4($text_box_input, $key));
           }
           break;
       }
@@ -96,7 +100,7 @@ _END;
   if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true ) {
     echo <<<_END
   <div class="userform">
-  <form method='post' action='mainform.php'>
+  <form method='post' action='mainform.php' accept-charset="UTF-8">
     <textarea name="textinput" cols="100" rows="5" style="border: none" style="padding:5px">Enter plaintext/ciphertext here...</textarea>
     <br>
     <select id="cipherselector" name="ciphertype">

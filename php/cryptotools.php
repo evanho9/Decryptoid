@@ -21,6 +21,13 @@
   print_r(string_to_alphabet_map("dzprjqnucwtayblshgvmfxekio"));
   */
   
+  
+  $encryption = rc4("hello world", "abc");
+  echo $encryption;
+  $decryption = rc4($encryption, "abc");
+  echo $decryption;
+  
+  
   function string_to_alphabet_map($string) {
     $res_map = array("a" => "A", "b" => "B", "c" => "C", "d" => "D", "e" => "E", "f" => "F",
                      "g" => "G", "h" => "H", "i" => "I", "j" => "J", "k" => "K", "l" => "L",
