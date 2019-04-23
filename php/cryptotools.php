@@ -21,47 +21,51 @@
   print_r(string_to_alphabet_map("dzprjqnucwtayblshgvmfxekio"));
   */
   
-  
+  /*
   $encryption = rc4("hello world", "abc");
   echo $encryption;
   $decryption = rc4($encryption, "abc");
   echo $decryption;
-  
+  */
   
   function string_to_alphabet_map($string) {
-    $res_map = array("a" => "A", "b" => "B", "c" => "C", "d" => "D", "e" => "E", "f" => "F",
-                     "g" => "G", "h" => "H", "i" => "I", "j" => "J", "k" => "K", "l" => "L",
-                     "m" => "M", "n" => "N", "o" => "O", "p" => "P", "q" => "Q", "r" => "R",
-                     "s" => "S", "t" => "T", "u" => "U", "v" => "V", "w" => "W", "x" => "X",
-                     "y" => "Y", "z" => "Z");
+    $res_map = array("a" => "a", "b" => "b", "c" => "c", "d" => "d", "e" => "e", "f" => "f",
+                     "g" => "g", "h" => "h", "i" => "i", "j" => "j", "k" => "k", "l" => "l",
+                     "m" => "m", "n" => "n", "o" => "o", "p" => "p", "q" => "q", "r" => "r",
+                     "s" => "s", "t" => "t", "u" => "u", "v" => "v", "w" => "w", "x" => "x",
+                     "y" => "y", "z" => "z");
     $keys = array_keys($res_map);
     for ($i=0; $i<26; $i++) {
       if ($string[$i] != null)
-        $res_map[$keys[$i]] = strtoupper($string[$i]);
+        $res_map[$keys[$i]] = ($string[$i]);
       else
         $res_map[$keys[$i]] = "*";
     }
     return $res_map;
   }
   
+  function search_alphabet_by_value($alphabet, $value) {
+    
+  }
+  
   function substitution_encrypt($to_encrypt, $alphabet) {
     $to_encrypt = str_split($to_encrypt);
-    $res = str_repeat("*", sizeOf($to_encrypt));
+    $res = str_repeat(" ", sizeOf($to_encrypt));
     for ($i=0; $i<sizeOf($to_encrypt); $i++) {
-      if ($res[$i] != ' ' && $res[$i] != null && $to_encrypt[$i] != null) {
-        if ($to_encrypt[$i] != null && $alphabet[$to_encrypt[$i]] != null && $alphabet[$to_encrypt[$i]] != ' ')
-          $res[$i] = $alphabet[$to_encrypt[$i]];
-      }
+      if ($to_encrypt[$i] != ' ' && $to_encrypt[$i] != null && $alphabet[$to_encrypt[$i]] != null && $alphabet[$to_encrypt[$i]] != ' ')
+        $res[$i] = $alphabet[$to_encrypt[$i]];
     }
     return $res;
   }
   
   function substitution_decrypt($to_decrypt, $alphabet) {
     $to_decrypt = str_split($to_decrypt);
-    $res = str_repeat("*", sizeOf($to_decrypt));
+    $res = str_repeat(" ", sizeOf($to_decrypt));
     for ($i=0; $i<sizeOf($to_decrypt); $i++) {
-      if ($res[$i] !== " ")
+      if ($to_decrypt[$i] != ' ' && $to_decrypt[$i] != null && $alphabet[$to_decrypt[$i]] != null && $alphabet[$to_decrypt[$i]] != ' ') {
+        
         $res[$i] = array_search($to_decrypt[$i], $alphabet);
+      }
     }
     return $res;
   }
@@ -82,7 +86,11 @@
     $to_encrypt_index = 0;
     for ($i=0; $i<$num_rows; $i++) {
       for ($j=0; $j<$num_cols; $j++) {
-        $matrix[$i][$j] = $string[$to_encrypt_index];
+        if($to_encrypt_index < strlen($string)) {
+          $matrix[$i][$j] = $string[$to_encrypt_index];
+        } else {
+          $matrix[$i][$j] = ' ';
+        }
         $to_encrypt_index++;
       }
     }
@@ -109,7 +117,7 @@
         if ($res_matrix[$i][$j] != ' ' && $res_matrix[$i][$j] != null)
           $res[$res_index] = $res_matrix[$i][$j];
         else 
-          $res[$res_index] = '*';
+          $res[$res_index] = ' ';
         $res_index++;
       }
     }

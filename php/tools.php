@@ -32,7 +32,8 @@
       if ($result->num_rows < 1) {
         $query = "CREATE TABLE userfiles (
                      owner VARCHAR(32) NOT NULL,
-                     name VARCHAR(32) NOT NULL,
+                     cipher CHAR(3) NOT NULL,
+                     enc/dec CHAR(3) NOT NULL,
                      textfilecontent BLOB,
                      id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
                      ) ENGINE MyISAM";

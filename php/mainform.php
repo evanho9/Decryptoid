@@ -12,6 +12,7 @@
   }
   /*
   
+   
   */
   echo <<<_END
   <html>
@@ -47,43 +48,60 @@ _END;
 
   if (isset($_POST['textboxbutton']) && !empty($_POST['textinput']) && $_POST['textinput'] != 'Enter ciphertext/plaintext here...' &&
       isset($_POST['ciphertype']) && isset($_POST['encryptordecrypt'])) {
-      $text_box_input = mysql_entities_fix_string($conn, $_POST['textinput']);
-      
+      $text_box_input = strtolower(mysql_entities_fix_string($conn, $_POST['textinput']));
+      $_SESSION['lasttextinput'] = $text_box_input;
       
       $result = "Encrypt/decrypt not successful";
       switch ($_POST['ciphertype']) {
         case 'substitution':
+          $key =  strtolower(mysql_entities_fix_string($conn, $_POST['key']));
+          $_SESSION['lastkey'] = $key;
           $alphabet = string_to_alphabet_map(mysql_entities_fix_string($conn, $_POST['key']));
           if ($_POST['encryptordecrypt'] == 'encrypt') {
             $result = substitution_encrypt($text_box_input, $alphabet);
           } else {
             $result = substitution_decrypt($text_box_input, $alphabet);
           }
+          echo <<<_END
+      <div class="message">
+          <p><a style="color:red">Input receieved, {$_POST['ciphertype']} was used to {$_POST['encryptordecrypt']} with key: {$key}</a></p>
+          <p>{$result}</p>
+      </div>
+_END;
           break;
         case 'double transposition':
           $row_perm = mysql_entities_fix_string($conn, $_POST['rowperm']);
           $col_perm = mysql_entities_fix_string($conn, $_POST['colperm']);
+          $_SESSION['lastrowperm'] = $row_perm;
+          $_SESSION['lastcolperm'] = $col_perm;
           if ($_POST['encryptordecrypt'] == 'encrypt') {
             $result = double_transposition($text_box_input, $row_perm, $col_perm);
           } else {
             $result = double_transposition($text_box_input, $row_perm, $col_perm);
           }
-          break;
-        case 'RC4':
-          $key = mysql_entities_fix_string($conn, $_POST['key']);
-          if ($_POST['encryptordecrypt'] == 'encrypt') {
-            $result = utf8_encode(RC4($text_box_input, $key));
-          } else {
-            $result = utf8_encode(RC4($text_box_input, $key));
-          }
-          break;
-      }
-      echo <<<_END
+          echo <<<_END
       <div class="message">
-          <p><a style="color:red">Input receieved, {$_POST['ciphertype']} was used to {$_POST['encryptordecrypt']}.</a></p>
+      <p><a style="color:red">Input receieved, {$_POST['ciphertype']} was used to {$_POST['encryptordecrypt']} with key: {$row_perm} and {$col_perm}</a></p>
           <p>{$result}</p>
       </div>
 _END;
+          break;
+        case 'RC4':
+          $key = mysql_entities_fix_string($conn, $_POST['key']);
+          $_SESSION['lastkey'] = $key;
+          if ($_POST['encryptordecrypt'] == 'encrypt') {
+            $result = utf8_encode(RC4($text_box_input, $key));
+          } else {
+            $result = utf8_encode(RC4($text_box_input, $key));
+          }
+          echo <<<_END
+      <div class="message">
+          <p><a style="color:red">Input receieved, {$_POST['ciphertype']} was used to {$_POST['encryptordecrypt']} with key: {$key}</a></p>
+          <p>{$result}</p>
+      </div>
+_END;
+          break;
+      }
   }
   
   //TODO FIX THIS
@@ -113,7 +131,7 @@ _END;
     <input type='submit' name='textboxbutton' value='Submit'>
     <br>
     Key: <input id="key" name="key" size="27" maxchars="26" value="abcdefghijklmnopqrstuvwxyz" type="text">
-    Row Permutation: <input id='rowperm' name='rowperm' value='(0,1,2)' type='text'>
+    Row Permutation: <input id='rowperm' name='rowperm' value="(0,1,2)"" type='text'>
     Column Permutation: <input id="colperm" name="colperm" value="(0,1,2,3)" type="text">
     <input name="generateKey" value="Generate Random Key" onclick="GenRandKey()" type="button">
   </form>
