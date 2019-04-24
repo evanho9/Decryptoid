@@ -28,6 +28,9 @@
         <h1 id="blink">|</h1>
         <script src="../js/htimer.js"></script>
         <script src="../js/control.js"></script>
+        <nav>
+          <a href='userpage.php'>User History</a>
+        </nav>
       </div>
 _END;
   header('Content-Type: text/html; charset=utf-8');
@@ -45,12 +48,14 @@ _END;
 
   $conn = new mysqli($hn, $un, $pw, $db);
   if ($conn->connect_error) die ($conn->connect_error);
+  create_userfiles_table($conn);
 
   if (isset($_POST['textboxbutton']) && !empty($_POST['textinput']) && $_POST['textinput'] != 'Enter ciphertext/plaintext here...' &&
       isset($_POST['ciphertype']) && isset($_POST['encryptordecrypt'])) {
       $text_box_input = strtolower(mysql_entities_fix_string($conn, $_POST['textinput']));
       $_SESSION['lasttextinput'] = $text_box_input;
-      
+      $cipher_type = mysql_entities_fix_string($conn, $_POST['ciphertype']);
+      $encrypt_or_decrypt = mysql_entities_fix_string($conn, $_POST['encryptordecrypt']);
       $result = "Encrypt/decrypt not successful";
       switch ($_POST['ciphertype']) {
         case 'substitution':
@@ -64,8 +69,8 @@ _END;
           }
           echo <<<_END
       <div class="message">
-          <p><a style="color:red">Input receieved, {$_POST['ciphertype']} was used to {$_POST['encryptordecrypt']} with key: {$key}</a></p>
-          <p>{$result}</p>
+          <p><a style="color:red">Input receieved, $cipher_type was used to $encrypt_or_decrypt with key: $key</a></p>
+          <p>$result</p>
       </div>
 _END;
           break;
@@ -81,8 +86,8 @@ _END;
           }
           echo <<<_END
       <div class="message">
-      <p><a style="color:red">Input receieved, {$_POST['ciphertype']} was used to {$_POST['encryptordecrypt']} with key: {$row_perm} and {$col_perm}</a></p>
-          <p>{$result}</p>
+      <p><a style="color:red">Input receieved, $cipher_type was used to $encrypt_or_decrypt with key: $row_perm and $col_perm</a></p>
+          <p>$result</p>
       </div>
 _END;
           break;
@@ -96,12 +101,13 @@ _END;
           }
           echo <<<_END
       <div class="message">
-          <p><a style="color:red">Input receieved, {$_POST['ciphertype']} was used to {$_POST['encryptordecrypt']} with key: {$key}</a></p>
-          <p>{$result}</p>
+          <p><a style="color:red">Input receieved, $cipher_type was used to $encrypt_or_decrypt with key: $key</a></p>
+          <p>$result</p>
       </div>
 _END;
           break;
       }
+      store_content($conn, $_SESSION['username'], $cipher_type, $encrypt_or_decrypt, $text_box_input, $result);
   }
   
   //TODO FIX THIS
@@ -135,12 +141,6 @@ _END;
     Column Permutation: <input id="colperm" name="colperm" value="(0,1,2,3)" type="text">
     <input name="generateKey" value="Generate Random Key" onclick="GenRandKey()" type="button">
   </form>
-  </div>
-  
-_END;
-  
-    echo <<<_END
-  <div class="userform">
   <form method='post' action='mainform.php' enctype='multipart/form-data'>
     Or Select .txt File: <input type='file' name='Filename' size='16'>
     <input type='submit' name='inputfilebutton' value='Upload File'>

@@ -32,15 +32,25 @@
       if ($result->num_rows < 1) {
         $query = "CREATE TABLE userfiles (
                      owner VARCHAR(32) NOT NULL,
-                     cipher CHAR(3) NOT NULL,
-                     enc/dec CHAR(3) NOT NULL,
-                     textfilecontent BLOB,
+                     cipher CHAR(20) NOT NULL,
+                     encordec CHAR(7) NOT NULL,
+                     input BLOB,
+                     output BLOB,
+                     ts TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                      id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
                      ) ENGINE MyISAM";
         $result = $conn->query($query);
         if (!$result) die ("Database access failed: " . $conn->error);
       }
     } else if (!$result) die ("Database access failed: " . $conn->error);
+  }
+  
+  function store_content($conn, $user, $cipher, $encordec, $input, $output) {
+    $stmt = $conn->prepare("INSERT INTO userfiles VALUES(?, ?, ?, ?, ?, NULL, NULL)");
+    $stmt->bind_param('sssss', $user, $cipher, $encordec, $input, $output);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $stmt->close();
   }
   
   function get_text_files_of_user($conn, $user) {

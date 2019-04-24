@@ -2,6 +2,8 @@
   require_once 'login.php';
   require_once 'tools.php';
   
+  session_start();
+  
   if (isset($_SESSION['check']) && $_SESSION['check'] != hash('ripemd128', $_SERVER['REMOTE_ADDR'] .$_SERVER['HTTP_USER_AGENT']))
     different_user();
   if (!isset($_SESSION['initiated'])) {

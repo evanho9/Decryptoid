@@ -1,4 +1,5 @@
 <?php
+
   echo <<<_END
   <html>
     <head>
