@@ -23,7 +23,7 @@
     </head>
     <body>
       <div class="header">
-        <h1>Decryptoid. >_</h1>
+        <h1><a href='index.php'>Decryptoid. >_</a></h1>
         <h1 id="blink">|</h1>
         <script src="../js/htimer.js"></script>
         <script src="../js/control.js"></script>
@@ -52,7 +52,7 @@ _END;
   if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
     $username = mysql_entities_fix_string($conn, $_SESSION['username']);
     echo <<<_END
-      <div class="message">
+      <div class="userdata">
         <pre>
         You are currently logged in as $username.
         Here is your crypto history:

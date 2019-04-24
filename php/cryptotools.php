@@ -52,7 +52,7 @@
     $to_encrypt = str_split($to_encrypt);
     $res = str_repeat(" ", sizeOf($to_encrypt));
     for ($i=0; $i<sizeOf($to_encrypt); $i++) {
-      if ($to_encrypt[$i] != ' ' && $to_encrypt[$i] != null && $alphabet[$to_encrypt[$i]] != null && $alphabet[$to_encrypt[$i]] != ' ')
+      if ($to_encrypt[$i] != ' ' && $to_encrypt[$i] != null && array_key_exists($to_encrypt[$i], $alphabet))
         $res[$i] = $alphabet[$to_encrypt[$i]];
     }
     return $res;

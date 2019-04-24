@@ -20,7 +20,7 @@
     </head>
     <body>
     <div class="header">
-        <h1>Decryptoid. >_</h1>
+        <h1><a href='index.php'>Decryptoid. >_</a></h1>
         <h1 id="blink">|</h1>
         <script src="../js/htimer.js"></script>
       </div>
