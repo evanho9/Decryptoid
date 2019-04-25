@@ -27,6 +27,7 @@
         <script src="../js/htimer.js"></script>
       </div>
 _END;
+  create_database();
   $conn = new mysqli($hn, $un, $pw, $db);
   if ($conn->connect_error) die ($conn->connect_error);
   create_database($conn);

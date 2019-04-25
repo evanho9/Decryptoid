@@ -3,12 +3,15 @@
   
   //General application tools
   
-  function create_database($conn) {
-    global $db;
-    $query = "CREATE DATABASE IF NOT EXISTS $db";
-    $result = $conn->query($query);
-    if (!$result) die ($conn->error);
-    $conn->select_db($db);
+  function create_database() {
+    global $hn, $un, $pw, $db;
+    $link = mysqli_connect($hn, $un, $pw);
+    if (!$link) die ('Could not connect: ' . mysql_error());
+    $db_selected = mysqli_select_db($link, $db);
+    if (!$db_selected) {
+    $sql = "CREATE DATABASE $db";
+    if (!mysqli_query($link, $sql)) die('Error creating database: ' . mysql_error());
+    }
   }
   
   function create_usercredentials_table($conn) {

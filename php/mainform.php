@@ -33,6 +33,7 @@
       </div>
 _END;
   header('Content-Type: text/html; charset=utf-8');
+  create_database();
   $conn = new mysqli($hn, $un, $pw, $db);
   if ($conn->connect_error) die ($conn->connect_error);
   create_userfiles_table($conn);
