@@ -1,6 +1,8 @@
 <?php
   require_once 'login.php';
   
+  //General application tools
+  
   function create_database($conn) {
     global $db;
     $query = "CREATE DATABASE IF NOT EXISTS $db";

@@ -3,16 +3,15 @@
   
   session_start();
   
+  //Session safety check
   if (isset($_SESSION['check']) && $_SESSION['check'] != hash('ripemd128', $_SERVER['REMOTE_ADDR'] .$_SERVER['HTTP_USER_AGENT']))
     different_user();
   if (!isset($_SESSION['initiated'])) {
     session_regenerate_id();
     $_SESSION['initiated'] = 1;
   }
-  /*
-  
-   
-  */
+
+  //Page preparation
   echo <<<_END
   <html>
     <head>
@@ -33,7 +32,11 @@
       </div>
 _END;
   header('Content-Type: text/html; charset=utf-8');
+  $conn = new mysqli($hn, $un, $pw, $db);
+  if ($conn->connect_error) die ($conn->connect_error);
+  create_userfiles_table($conn);
   
+  //Logged in check
   if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true ) {
     //$logged_in = true;
     //destroy_session_and_data();
@@ -45,10 +48,7 @@ _END;
 _END;
   }
 
-  $conn = new mysqli($hn, $un, $pw, $db);
-  if ($conn->connect_error) die ($conn->connect_error);
-  create_userfiles_table($conn);
-  
+  //Show user history logic
   if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
     $username = mysql_entities_fix_string($conn, $_SESSION['username']);
     echo <<<_END

@@ -4,16 +4,15 @@
   
   session_start();
   
+  //Session safety check
   if (isset($_SESSION['check']) && $_SESSION['check'] != hash('ripemd128', $_SERVER['REMOTE_ADDR'] .$_SERVER['HTTP_USER_AGENT']))
     different_user();
   if (!isset($_SESSION['initiated'])) {
     session_regenerate_id();
     $_SESSION['initiated'] = 1;
   }
-  /*
-  
-   
-  */
+
+  //Page preparation
   echo <<<_END
   <html>
     <head>
@@ -34,7 +33,11 @@
       </div>
 _END;
   header('Content-Type: text/html; charset=utf-8');
+  $conn = new mysqli($hn, $un, $pw, $db);
+  if ($conn->connect_error) die ($conn->connect_error);
+  create_userfiles_table($conn);
   
+  //Logged in check
   if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true ) {
     //$logged_in = true;
     //destroy_session_and_data();
@@ -46,12 +49,11 @@ _END;
 _END;
   }
 
-  $conn = new mysqli($hn, $un, $pw, $db);
-  if ($conn->connect_error) die ($conn->connect_error);
-  create_userfiles_table($conn);
-
-  if (isset($_POST['submitbutton']) && !empty($_POST['textinput']) && !is_uploaded_file($_FILES['userfile']['tmp_name']) &&
-      isset($_POST['ciphertype']) && isset($_POST['encryptordecrypt'])) {
+  //Main textbox crypto logic
+  if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true
+      && isset($_POST['submitbutton']) && !empty($_POST['textinput']) 
+      && !is_uploaded_file($_FILES['userfile']['tmp_name']) 
+      && isset($_POST['ciphertype']) && isset($_POST['encryptordecrypt'])) {
       $text_box_input = strtolower(mysql_entities_fix_string($conn, $_POST['textinput']));
       $_SESSION['lasttextinput'] = $text_box_input;
       $cipher_type = mysql_entities_fix_string($conn, $_POST['ciphertype']);
@@ -110,10 +112,10 @@ _END;
       store_content($conn, $_SESSION['username'], $cipher_type, $encrypt_or_decrypt, $text_box_input, $result);
   }
   
-  //Upload file logic
-  if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true && isset($_POST['submitbutton']) && is_uploaded_file($_FILES['userfile']['tmp_name']) &&
-      isset($_POST['ciphertype']) && isset($_POST['encryptordecrypt'])) {
-        echo "ENTERED FILE UPLOAD LOGIC";
+  //Upload file logic and file crypto logic
+  if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true 
+      && isset($_POST['submitbutton']) && is_uploaded_file($_FILES['userfile']['tmp_name']) 
+      && isset($_POST['ciphertype']) && isset($_POST['encryptordecrypt'])) {
     $file_name_without_extension = mysql_entities_fix_string($conn, pathinfo($_FILES['userfile']['name'], PATHINFO_FILENAME));
     switch ($_FILES['userfile']['type']) {
       case 'text/plain' : $ext = 'txt'; break;
@@ -189,6 +191,7 @@ _END;
     }
   }
   
+  //Main crypto form
   if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
     echo <<<_END
   <div class="userform">

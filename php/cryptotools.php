@@ -1,4 +1,6 @@
 <?php
+
+  //Crypto test cases
   /*
   $test_alphabet = array("a" => "x", "b" => "y", "c" => "z");
 
@@ -28,6 +30,8 @@
   echo $decryption;
   */
   
+  //All crypto based functions and helpers
+  
   function string_to_alphabet_map($string) {
     $res_map = array("a" => "a", "b" => "b", "c" => "c", "d" => "d", "e" => "e", "f" => "f",
                      "g" => "g", "h" => "h", "i" => "i", "j" => "j", "k" => "k", "l" => "l",
@@ -43,11 +47,7 @@
     }
     return $res_map;
   }
-  
-  function search_alphabet_by_value($alphabet, $value) {
-    
-  }
-  
+
   function substitution_encrypt($to_encrypt, $alphabet) {
     $to_encrypt = str_split($to_encrypt);
     $res = str_repeat(" ", sizeOf($to_encrypt));
@@ -94,7 +94,6 @@
         $to_encrypt_index++;
       }
     }
-    
     
     $temp_matrix = array();
     for ($i=0; $i<$num_rows; $i++) {

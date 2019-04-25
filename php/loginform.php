@@ -4,6 +4,7 @@
   
   session_start();
   
+  //Session safety check
   if (isset($_SESSION['check']) && $_SESSION['check'] != hash('ripemd128', $_SERVER['REMOTE_ADDR'] .$_SERVER['HTTP_USER_AGENT']))
     different_user();
   if (!isset($_SESSION['initiated'])) {
@@ -11,6 +12,7 @@
     $_SESSION['initiated'] = 1;
   }
   
+  //Page preparation
   echo <<<_END
   <html>
     <head>
@@ -25,47 +27,24 @@
         <script src="../js/htimer.js"></script>
       </div>
 _END;
-  
   $conn = new mysqli($hn, $un, $pw, $db);
   if ($conn->connect_error) die ($conn->connect_error);
   create_database($conn);
   create_usercredentials_table($conn);
   
-  /*
-  if (isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW'])) {
-    $username_temp = mysql_entities_fix_string($conn, $_SERVER['PHP_AUTH_USER']);
-    $password_temp = mysql_entities_fix_string($conn, $_SERVER['PHP_AUTH_PW']);
-    
-    $stmt = $conn->prepare("SELECT * FROM users WHERE username=?");
-    $stmt->bind_param('s', $username);
-    $stmt->execute();
-    
-    $result = $stmt->get_result();
-    $stmt->close();
-    if (!result) die ($conn->error);
-    elseif ($result->num_rows > 0 ) {
-      $row = $result->fetch_array(MYSQLI_ASSOC);
-      $result->close();
-      $token = saltandhash($password_temp);
-      if ($token == $row['password']) {
-        echo '<script>window.location.href = "mainform.php";</script>';
-      } 
-    } else {
-        echo <<<_END
-        <div class="message">
-            <p><a style="color:red">Incorrect username or password!</a> Click <a href="registerform.php" style="color:blue">here</a> to register instead.</p>
-        </div>
+  //Logged in already logic
+  if (isset($_SESSION['loggedin'])) {
+    echo <<<_END
+      <div class="message">
+          <p><a style="color:red">Already logged in!</a> Click <a href="registerform.php" style="color:blue">here</a> to proceed instead.</p>
+          <p><a style="color:red">Click <a href="registerform.php" style="color:blue">here</a> to logout.</p>
+      </div>
 _END;
-    }
-  } else {
-      header('WWW-Authenticate: Basic realm="Restricted Section"');
-      header('HTTP/1.0 401 Unauthorized');
-      die("Please enter your username and password");
   }
-  */
   
-    //Login logic
-  if (!isset($_SESSION['loggedin']) && isset($_POST['loginbutton']) && !empty($_POST['username']) && !empty($_POST['password'])) {
+  //Login logic
+  if (!isset($_SESSION['loggedin']) && isset($_POST['loginbutton']) 
+      && !empty($_POST['username']) && !empty($_POST['password'])) {
     $username = mysql_entities_fix_string($conn, $_POST['username']);
     $password = mysql_entities_fix_string($conn, $_POST['password']);
     
@@ -100,6 +79,7 @@ _END;
     }
   }
   
+  //Login form
   echo <<<_END
   <div class="userform">
     <form action="loginform.php" method="post"><pre>

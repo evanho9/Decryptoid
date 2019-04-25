@@ -4,6 +4,7 @@
   
   session_start();
   
+  //Session safety check
   if (isset($_SESSION['check']) && $_SESSION['check'] != hash('ripemd128', $_SERVER['REMOTE_ADDR'] .$_SERVER['HTTP_USER_AGENT']))
     different_user();
   if (!isset($_SESSION['initiated'])) {
@@ -11,6 +12,7 @@
     $_SESSION['initiated'] = 1;
   }
   
+  //Page preparation
   echo <<<_END
   <html>
     <head>
@@ -25,12 +27,21 @@
         <script src="../js/htimer.js"></script>
       </div>
 _END;
-  
   $conn = new mysqli($hn, $un, $pw, $db);
   if ($conn->connect_error) die ($conn->connect_error);
   create_database($conn);
   create_usercredentials_table($conn);
   
+  if (isset($_SESSION['loggedin'])) {
+    echo <<<_END
+      <div class="message">
+          <p><a style="color:red">Already logged in!</a> Click <a href="registerform.php" style="color:blue">here</a> to proceed instead.</p>
+          <p><a style="color:red">Click <a href="registerform.php" style="color:blue">here</a> to logout.</p>
+      </div>
+_END;
+  }
+  
+  //Register logic
   if (isset($_POST['registerbutton']) && !empty($_POST['email']) && !empty($_POST['username']) && !empty($_POST['password'])) {
     $email = mysql_entities_fix_string($conn, $_POST['email']);
     $username = mysql_entities_fix_string($conn, $_POST['username']);
@@ -47,6 +58,7 @@ _END;
     }
   }
   
+  //Register form
   echo <<<_END
   <div class="userform">
   <form action="registerform.php" method="post"><pre>
