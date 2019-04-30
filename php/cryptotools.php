@@ -151,19 +151,38 @@
       }
     }
     
+    $col_assoc = array();
+    $col_perm_index = 0;
+    $temp_matrix = array();
+    for ($j=0; $j<$num_cols; $j++) {
+      $col_assoc[$col_perm[$col_perm_index]] = array();
+      for ($i=0; $i<$num_rows; $i++) {
+        array_push($col_assoc[$col_perm[$col_perm_index]], $matrix[$i][$j]);
+      }
+      $col_perm_index++;
+    }
+    
     $temp_matrix = array();
     for ($i=0; $i<$num_rows; $i++) {
       for ($j=0; $j<$num_cols; $j++) {
-        if (isset($matrix[$row_perm[$i]][$j]))
-          $temp_matrix[$i][$j] = $matrix[$row_perm[$i]][$j];
+        $temp_matrix[$i][$j] = $col_assoc[$j][$i];
       }
+    }
+    
+    $row_assoc = array();
+    $row_perm_index = 0;
+    for ($i=0; $i<$num_rows; $i++) {
+      $row_assoc[$row_perm[$row_perm_index]] = array();
+      for ($j=0; $j<$num_cols; $j++) {
+        array_push($row_assoc[$row_perm[$i]], $matrix[$i][$j]);
+      }
+      $row_perm_index++;
     }
     
     $res_matrix = array();
     for ($i=0; $i<$num_rows; $i++) {
       for ($j=0; $j<$num_cols; $j++) {
-        if (isset($temp_matrix[$i][$col_perm[$j]]))
-          $res_matrix[$i][$j] = $temp_matrix[$i][$col_perm[$j]];
+        $res_matrix[$i][$j] = $row_assoc[$i][$j];
       }
     }
     

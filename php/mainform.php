@@ -83,9 +83,9 @@ _END;
           $_SESSION['lastrowperm'] = $row_perm;
           $_SESSION['lastcolperm'] = $col_perm;
           if ($_POST['encryptordecrypt'] == 'encrypt') {
-            $result = double_transposition($text_box_input, $row_perm, $col_perm, true);
+            $result = double_transposition_encrypt($text_box_input, $row_perm, $col_perm);
           } else {
-            $result = double_transposition($text_box_input, $row_perm, $col_perm, false);
+            $result = double_transposition_decrypt($text_box_input, $row_perm, $col_perm);
           }
           echo <<<_END
       <div class="message">
