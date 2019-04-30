@@ -72,7 +72,7 @@ _END;
           }
           echo <<<_END
       <div class="message">
-          <p><a style="color:red">Input receieved, $cipher_type was used to $encrypt_or_decrypt with key: $key</a></p>
+          <p><a style="color:red">Input: [ $text_box_input ] receieved, $cipher_type was used to $encrypt_or_decrypt with key: $key</a></p>
           <p>$result</p>
       </div>
 _END;
@@ -83,13 +83,13 @@ _END;
           $_SESSION['lastrowperm'] = $row_perm;
           $_SESSION['lastcolperm'] = $col_perm;
           if ($_POST['encryptordecrypt'] == 'encrypt') {
-            $result = double_transposition($text_box_input, $row_perm, $col_perm);
+            $result = double_transposition($text_box_input, $row_perm, $col_perm, true);
           } else {
-            $result = double_transposition($text_box_input, $row_perm, $col_perm);
+            $result = double_transposition($text_box_input, $row_perm, $col_perm, false);
           }
           echo <<<_END
       <div class="message">
-      <p><a style="color:red">Input receieved, $cipher_type was used to $encrypt_or_decrypt with key: $row_perm and $col_perm</a></p>
+      <p><a style="color:red">Input: [ $text_box_input ] receieved, $cipher_type was used to $encrypt_or_decrypt with key: $row_perm and $col_perm</a></p>
           <p>$result</p>
       </div>
 _END;
@@ -104,7 +104,7 @@ _END;
           }
           echo <<<_END
       <div class="message">
-          <p><a style="color:red">Input receieved, $cipher_type was used to $encrypt_or_decrypt with key: $key</a></p>
+          <p><a style="color:red">Input: [ $text_box_input ] receieved, $cipher_type was used to $encrypt_or_decrypt with key: $key</a></p>
           <p>$result</p>
       </div>
 _END;
@@ -209,8 +209,8 @@ _END;
     Key: <input id="key" name="key" size="27" maxchars="26" value="abcdefghijklmnopqrstuvwxyz" type="text">
     <input name="generateKey" value="Generate Random Key" onclick="GenRandKey()" type="button">
     <br><br>
-    Row Permutation: <input id='rowperm' name='rowperm' value="(0,1,2)"" type='text'>
-    Column Permutation: <input id="colperm" name="colperm" value="(0,1,2,3)" type="text">
+    Row Permutation: <input id='rowperm' name='rowperm' value="0,1,2"" type='text'>
+    Column Permutation: <input id="colperm" name="colperm" value="0,1,2,3" type="text">
     <br><br>
     <input type='radio' name='encryptordecrypt' checked="checked" value='encrypt'>Encrypt
     <input type='radio' name='encryptordecrypt' value='decrypt'>Decrypt

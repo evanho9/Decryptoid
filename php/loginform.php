@@ -37,7 +37,7 @@ _END;
   if (isset($_SESSION['loggedin'])) {
     echo <<<_END
       <div class="message">
-          <p><a style="color:red">Already logged in!</a> Click <a href="registerform.php" style="color:blue">here</a> to proceed instead.</p>
+          <p><a style="color:red">Already logged in!</a> Click <a href="mainform.php" style="color:blue">here</a> to proceed instead.</p>
           <p><a style="color:red">Click <a href="registerform.php" style="color:blue">here</a> to logout.</p>
       </div>
 _END;
