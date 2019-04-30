@@ -9,15 +9,15 @@
   echo substitution_decrypt("xyz", $test_alphabet);
   */
   
-  
+  /*
   print "<pre>";
-  print_r(double_transposition_encrypt("helloworld", "(0,2,1)", "(2,1,0)"));
+  print_r(double_transposition_encrypt("hello world i am evan", "(0,2,1,3)", "(0,2,3,1,4)"));
   print "</pre>";
-  
+ 
   print "<pre>";
-  print_r(double_transposition_decrypt("hleolrlwo", "(0,2,1)", "(2,1,0)"));
+  print_r(double_transposition_decrypt("hlleoimeavwrloda__n_", "(0,2,1,3)", "(0,2,3,1,4)"));
   print "</pre>";
-  
+  */
   
   /*
   print_r(string_to_alphabet_map("dzprjqnucwtayblshgvmfxekio"));
@@ -174,7 +174,7 @@
     for ($i=0; $i<$num_rows; $i++) {
       $row_assoc[$row_perm[$row_perm_index]] = array();
       for ($j=0; $j<$num_cols; $j++) {
-        array_push($row_assoc[$row_perm[$i]], $matrix[$i][$j]);
+        array_push($row_assoc[$row_perm[$i]], $temp_matrix[$i][$j]);
       }
       $row_perm_index++;
     }

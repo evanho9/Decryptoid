@@ -79,7 +79,9 @@ _END;
           break;
         case 'double transposition':
           $row_perm = mysql_entities_fix_string($conn, $_POST['rowperm']);
+          $row_perm = str_replace(' ', '', $row_perm);
           $col_perm = mysql_entities_fix_string($conn, $_POST['colperm']);
+          $col_perm = str_replace(' ', '', $col_perm);
           $_SESSION['lastrowperm'] = $row_perm;
           $_SESSION['lastcolperm'] = $col_perm;
           if ($_POST['encryptordecrypt'] == 'encrypt') {
@@ -89,7 +91,7 @@ _END;
           }
           echo <<<_END
       <div class="message">
-      <p><a style="color:red">Input: [ $text_box_input ] receieved, $cipher_type was used to $encrypt_or_decrypt with key: $row_perm and $col_perm</a></p>
+      <p><a style="color:red">Input: [ $text_box_input ] receieved, $cipher_type was used to $encrypt_or_decrypt with key: Row permuations: ($row_perm) and Column permuations: ($col_perm)</a></p>
           <p>$result</p>
       </div>
 _END;

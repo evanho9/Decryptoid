@@ -27,6 +27,7 @@
         </div>
         <div class="description">
           <p>This is a web application meant to encrypt/decrypt an input plaintext/ciphertext. Login or register above to begin.</p>
+          <p>Compatible ciphers: Substitution, Double Transposition, RC4</p>
         </div>
       </div>
     </body>

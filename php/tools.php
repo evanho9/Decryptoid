@@ -67,6 +67,15 @@
     return $result;
   }
   
+  function clear_user_history($conn, $user) {
+    $stmt = $conn->prepare("DELETE FROM userfiles WHERE owner=?");
+    $stmt->bind_param('s', $user);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $stmt->close();
+    return $result;
+  }
+  
   function different_user() {
     destroy_session_and_data();
   }

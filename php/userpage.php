@@ -27,7 +27,7 @@
         <script src="../js/htimer.js"></script>
         <script src="../js/control.js"></script>
         <nav>
-          <a href='userpage.php'>User History</a>
+          <a href='mainform.php'>Main Form</a>
         </nav>
       </div>
 _END;
@@ -49,32 +49,40 @@ _END;
 _END;
   }
 
+  if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true
+      && isset($_POST['clearbutton'])) {
+    $user = $_SESSION['username'];
+    clear_user_history($conn, $user);
+  }
+  
   //Show user history logic
   if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
     $username = mysql_entities_fix_string($conn, $_SESSION['username']);
     echo <<<_END
       <div class="userdata">
-        <pre>
-        You are currently logged in as $username.
+        
+        <form action="userpage.php" method="post"><pre>
+        You are currently logged in as $username.<br>
+        <input type="submit" name="clearbutton" value="Clear history"><br>
         Here is your crypto history:
-        </pre>
+        </pre></form>
 _END;
     $user_files = get_text_files_of_user($conn, $username);
     if ($user_files->num_rows > 0) {
       while ($row = $user_files->fetch_assoc()) {
         echo <<<_END
   <pre>
-  Cipher: {$row['cipher']}
-  Encryption/Decryption: {$row['encordec']}
-  Input: {$row['input']}
-  Output: {$row['output']}
+  <b>Cipher:</b> {$row['cipher']}
+    {$row['encordec']}
+  <b>Input:</b> {$row['input']}
+  <b>Output:</b> {$row['output']}
   </pre>
 _END;
       }
     } else {
         echo <<<_END
   <pre>
-  No crypto history!
+  <b>No crypto history!</b>
   </pre>
 _END;
         }
