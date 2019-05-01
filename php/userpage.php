@@ -10,6 +10,11 @@
     session_regenerate_id();
     $_SESSION['initiated'] = 1;
   }
+  
+  //Logout logic
+  if (isset($_POST['logoutbutton'])) {
+    different_user();
+  }
 
   //Page preparation
   echo <<<_END
@@ -25,10 +30,6 @@
         <h1><a href='index.php'>Decryptoid. >_</a></h1>
         <h1 id="blink">|</h1>
         <script src="../js/htimer.js"></script>
-        <script src="../js/control.js"></script>
-        <nav>
-          <a href='mainform.php'>Main Form</a>
-        </nav>
       </div>
 _END;
   header('Content-Type: text/html; charset=utf-8');
@@ -44,7 +45,7 @@ _END;
   } else {
       echo <<<_END
   <div class="message">
-    <p><a style="color:red">Session not valid!</a> Click <a href="loginform.php" style="color:blue">here</a> to login!</p>
+    <p><a style="color:red">Not logged in/Session not valid!</a> Click <a href="loginform.php" style="color:blue">here</a> to login!</p>
   </div>
 _END;
   }
@@ -63,6 +64,9 @@ _END;
         
         <form action="userpage.php" method="post"><pre>
         You are currently logged in as $username.<br>
+        <form method='post' action='mainform.php' accept-charset="UTF-8" enctype='multipart/form-data'>
+          <a href='mainform.php'>Go Back to Main Form</a> or <input type='submit' name='logoutbutton' value='Logout'><br>
+        </form> 
         <input type="submit" name="clearbutton" value="Clear history"><br>
         Here is your crypto history:
         </pre></form>
@@ -88,6 +92,7 @@ _END;
         }
     echo "</div>";
   } else {
+    /*
       echo <<<_END
 <div class="message">
   <pre>
@@ -96,6 +101,7 @@ _END;
   </pre>
 </div>
 _END;
+*/
   }
 
   //End duties

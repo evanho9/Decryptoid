@@ -12,6 +12,11 @@
     $_SESSION['initiated'] = 1;
   }
   
+  //Logout logic
+  if (isset($_POST['logoutbutton'])) {
+    different_user();
+  }
+  
   //Page preparation
   echo <<<_END
   <html>
@@ -36,7 +41,10 @@ _END;
     echo <<<_END
       <div class="message">
           <p><a style="color:red">Already logged in!</a> Click <a href="mainform.php" style="color:blue">here</a> to proceed instead.</p>
-          <p><a style="color:red">Click <a href="registerform.php" style="color:blue">here</a> to logout.</p>
+          <form method='post' action='registerform.php' accept-charset="UTF-8" enctype='multipart/form-data'>
+          or
+          <input type='submit' name='logoutbutton' value='Logout'><br>
+          </form> 
       </div>
 _END;
   }
@@ -59,17 +67,20 @@ _END;
   }
   
   //Register form
-  echo <<<_END
-  <div class="userform">
-  <form action="registerform.php" method="post"><pre>
-  Email    <input type="text" name="email"><br>
-  Username <input type="text" name="username"><br>
-  Password <input type="password" name="password"><br>
-  <input type="submit" name="registerbutton" value="Register">
-  </pre></form>
-  </div>
+  if (!isset($_SESSION['loggedin'])) {
+    echo <<<_END
+    <div class="userform">
+      <form action="registerform.php" method="post"><pre>
+      Register here:<br>
+      Email    <input type="text" name="email"><br>
+      Username <input type="text" name="username"><br>
+      Password <input type="password" name="password"><br>
+      <input type="submit" name="registerbutton" value="Register">
+      </pre></form>
+    </div>
 _END;
-
+  }
+  
   //End duties
   $conn->close();
   $_POST = array();

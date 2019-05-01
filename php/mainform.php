@@ -12,6 +12,11 @@
     $_SESSION['initiated'] = 1;
   }
 
+  //Logout logic
+  if (isset($_POST['logoutbutton'])) {
+    different_user();
+  }
+  
   //Page preparation
   echo <<<_END
   <html>
@@ -27,9 +32,6 @@
         <h1 id="blink">|</h1>
         <script src="../js/htimer.js"></script>
         <script src="../js/control.js"></script>
-        <nav>
-          <a href='userpage.php'>User History</a>
-        </nav>
       </div>
 _END;
   header('Content-Type: text/html; charset=utf-8');
@@ -45,7 +47,7 @@ _END;
   } else {
       echo <<<_END
       <div class="message">
-          <p><a style="color:red">Session not valid!</a> Click <a href="loginform.php" style="color:blue">here</a> to login!</p>
+          <p><a style="color:red">Not logged in/Session not valid!</a> Click <a href="loginform.php" style="color:blue">here</a> to login!</p>
       </div>
 _END;
   }
@@ -199,10 +201,18 @@ _END;
     echo <<<_END
   <div class="userform">
   <form method='post' action='mainform.php' accept-charset="UTF-8" enctype='multipart/form-data'>
-    <textarea name="textinput" cols="100" rows="5" style="border: none" style="padding:5px" placeholder="Enter plaintext/ciphertext here..."></textarea>
-    Or Select .txt File: <input type='file' name='userfile' size='16'>
+    <a href='userpage.php'>Go to User History</a> or
+    <input type='submit' name='logoutbutton' value='Logout'>
+  </form> 
+  <br>
+  <form method='post' action='mainform.php' accept-charset="UTF-8" enctype='multipart/form-data'>
+    <textarea name="textinput" cols="100" rows="10" style="border: 1px solid red" style="padding:5px" placeholder="Enter plaintext/ciphertext here..."></textarea>
     <br><br>
-    <select id="cipherselector" name="ciphertype">
+    Or Select a .txt File: <input type='file' name='userfile' size='16'>
+    <br><br><br><br><br><br><br>
+    Cipher Options:
+    <br><br>
+    Cipher Type: <select id="cipherselector" name="ciphertype">
       <option value="substitution">Substitution</option>
       <option value="double transposition">Double Transposition</option>
       <option value="RC4">RC4</option>
@@ -216,7 +226,7 @@ _END;
     <br><br>
     <input type='radio' name='encryptordecrypt' checked="checked" value='encrypt'>Encrypt
     <input type='radio' name='encryptordecrypt' value='decrypt'>Decrypt
-    <input type='submit' name='submitbutton' value='Submit'>
+    <input type='submit' name='submitbutton' value='Submit'><br>
   </form>
   </div>
 _END;
