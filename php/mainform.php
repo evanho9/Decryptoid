@@ -199,7 +199,7 @@ _END;
   //Main crypto form
   if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true) {
     echo <<<_END
-  <div class="userform">
+  <div class="mainform">
   <form method='post' action='mainform.php' accept-charset="UTF-8" enctype='multipart/form-data'>
     <a href='userpage.php'>Go to User History</a> or
     <input type='submit' name='logoutbutton' value='Logout'>

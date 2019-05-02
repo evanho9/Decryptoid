@@ -4,7 +4,7 @@ var elem = document.getElementById("blink");
 
 function frame() {
   if (bool) {
-    elem.style.display = "flex";
+    elem.style.display = "inline";
     bool = false;
   } else {
     elem.style.display = "none";

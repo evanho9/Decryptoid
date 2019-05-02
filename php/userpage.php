@@ -61,26 +61,23 @@ _END;
     $username = mysql_entities_fix_string($conn, $_SESSION['username']);
     echo <<<_END
       <div class="userdata">
-        
-        <form action="userpage.php" method="post"><pre>
         You are currently logged in as $username.<br>
-        <form method='post' action='mainform.php' accept-charset="UTF-8" enctype='multipart/form-data'>
-          <a href='mainform.php'>Go Back to Main Form</a> or <input type='submit' name='logoutbutton' value='Logout'><br>
-        </form> 
-        <input type="submit" name="clearbutton" value="Clear history"><br>
+        <form method='post' action='userpage.php' accept-charset="UTF-8" enctype='multipart/form-data'><br>
+          <a href='mainform.php'>Go Back to Main Form</a> or <input type='submit' name='logoutbutton' value='Logout'><br><br>
+          <input type="submit" name="clearbutton" value="Clear history"><br><br><br>
         Here is your crypto history:
-        </pre></form>
+        </form>
 _END;
     $user_files = get_text_files_of_user($conn, $username);
     if ($user_files->num_rows > 0) {
       while ($row = $user_files->fetch_assoc()) {
         echo <<<_END
-  <pre>
+  <p>
   <b>Cipher:</b> {$row['cipher']}
-    {$row['encordec']}
-  <b>Input:</b> {$row['input']}
+    {$row['encordec']}<br>
+  <b>Input:</b> {$row['input']}<br>
   <b>Output:</b> {$row['output']}
-  </pre>
+  </p>
 _END;
       }
     } else {
@@ -89,7 +86,7 @@ _END;
   <b>No crypto history!</b>
   </pre>
 _END;
-        }
+    }
     echo "</div>";
   } else {
     /*
