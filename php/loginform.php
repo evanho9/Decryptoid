@@ -92,15 +92,16 @@ _END;
   if (!isset($_SESSION['loggedin'])) {
     echo <<<_END
     <div class="userform">
-      <form action="loginform.php" method="post"><pre>
-      Login here:<br>
-      Username <input type="text" name="username"><br>
-      Password <input type="password" name="password"><br>
+      <form action="loginform.php" method="post">
+      Login here:<br><br>
+      Username: <input type="text" name="username"><br><br>
+      Password: <input type="password" name="password"><br><br>
       <input type="submit" name="loginbutton" value="Login">
-      </pre></form>
+      </form>
     </div>
 _END;
   }
+  
   //End duties
   $conn->close();
   $_POST = array();

@@ -70,13 +70,13 @@ _END;
   if (!isset($_SESSION['loggedin'])) {
     echo <<<_END
     <div class="userform">
-      <form action="registerform.php" method="post"><pre>
-      Register here:<br>
-      Email    <input type="text" name="email"><br>
-      Username <input type="text" name="username"><br>
-      Password <input type="password" name="password"><br>
+      <form action="registerform.php" method="post">
+      Register here:<br><br>
+      Email: <input type="text" name="email"><br><br>
+      Username: <input type="text" name="username"><br><br>
+      Password: <input type="password" name="password"><br><br>
       <input type="submit" name="registerbutton" value="Register">
-      </pre></form>
+      </form>
     </div>
 _END;
   }

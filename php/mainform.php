@@ -188,9 +188,7 @@ _END;
     } else {
        echo <<<_END
   <div class="message">
-  <pre>
   Error! '$file_name_without_extension' is not an accepted text file! Try again!
-  </pre>
   </div>
 _END;
     }
