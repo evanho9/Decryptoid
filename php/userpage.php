@@ -15,6 +15,12 @@
   if (isset($_POST['logoutbutton'])) {
     different_user();
   }
+  
+  //Database preparation
+  create_database();
+  $conn = new mysqli($hn, $un, $pw, $db);
+  if ($conn->connect_error) die ($conn->connect_error);
+  create_userfiles_table($conn);
 
   //Page preparation
   echo <<<_END
@@ -24,19 +30,16 @@
       <link rel='stylesheet' href='../css/style.css'>
       <link rel='shortcut icon' href='../assets/favicon.png'>
       <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+      
     </head>
     <body>
       <div class="header">
         <h1><a href='index.php'>Decryptoid. >_</a></h1>
         <h1 id="blink">|</h1>
-        <script src="../js/htimer.js"></script>
+        <script src="../js/htimer.js"></script>        
       </div>
 _END;
   header('Content-Type: text/html; charset=utf-8');
-  create_database();
-  $conn = new mysqli($hn, $un, $pw, $db);
-  if ($conn->connect_error) die ($conn->connect_error);
-  create_userfiles_table($conn);
   
   //Logged in check
   if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true ) {

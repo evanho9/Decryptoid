@@ -17,6 +17,26 @@
     different_user();
   }
   
+  //Database preparation
+  create_database();
+  $conn = new mysqli($hn, $un, $pw, $db);
+  if ($conn->connect_error) die ($conn->connect_error);
+  create_usercredentials_table($conn);
+  
+  $username = $password = $email = "";
+  //Sanitation
+  if (isset($_POST['username']))
+    $username = mysql_entities_fix_string($conn, $_POST['username']);
+  if (isset($_POST['password']))
+    $password = mysql_entities_fix_string($conn, $_POST['password']);
+  if (isset($_POST['email']))
+    $email = mysql_entities_fix_string($conn, $_POST['email']);
+  
+  //Validation
+  $fail = validate_username($username);
+  $fail .= validate_password($password);
+  $fail .= validate_email($email);
+  
   //Page preparation
   echo <<<_END
   <html>
@@ -24,30 +44,41 @@
       <title>Register Page</title>
       <link rel='stylesheet' href='../css/style.css'>
       <link rel='shortcut icon' href='../assets/favicon.png'>
+      <script src="../js/validation.js"></script>
     </head>
     <body>
     <div class="header">
         <h1><a href='index.php'>Decryptoid. >_</a></h1>
         <h1 id="blink">|</h1>
-        <script src="../js/htimer.js"></script>
+        <script src="../js/htimer.js"></script> 
       </div>
 _END;
-  create_database();
-  $conn = new mysqli($hn, $un, $pw, $db);
-  if ($conn->connect_error) die ($conn->connect_error);
-  create_usercredentials_table($conn);
-  
-  if (isset($_SESSION['loggedin'])) {
-    echo <<<_END
+
+  //Logged in already logic
+  if (isset($_SESSION['loggedin'])) die (<<<_END
       <div class="message">
           <p><a style="color:red">Already logged in!</a> Click <a href="mainform.php" style="color:blue">here</a> to proceed instead.</p>
-          <form method='post' action='registerform.php' accept-charset="UTF-8" enctype='multipart/form-data'>
+          <form method='post' action='loginform.php' accept-charset="UTF-8" enctype='multipart/form-data'>
           or
           <input type='submit' name='logoutbutton' value='Logout'><br>
           </form> 
       </div>
-_END;
-  }
+_END
+);
+  
+  //Validation check
+  if ($fail != "") die (<<<_END
+    <div class="userform">
+      <form method="post" action="registerform.php" onSubmit="return validateRegistration(this)">
+      Register here:<br><br>
+      Email: <input type="text" name="email"><br><br>
+      Username: <input type="text" name="username"><br><br>
+      Password: <input type="password" name="password"><br><br>
+      <input type="submit" name="registerbutton" value="Register">
+      </form>
+    </div>
+_END
+);
   
   //Register logic
   if (isset($_POST['registerbutton']) && !empty($_POST['email']) && !empty($_POST['username']) && !empty($_POST['password'])) {
@@ -70,7 +101,7 @@ _END;
   if (!isset($_SESSION['loggedin'])) {
     echo <<<_END
     <div class="userform">
-      <form action="registerform.php" method="post">
+      <form method="post" action="registerform.php" onSubmit="return validateRegistration(this)">
       Register here:<br><br>
       Email: <input type="text" name="email"><br><br>
       Username: <input type="text" name="username"><br><br>

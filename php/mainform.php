@@ -17,6 +17,12 @@
     different_user();
   }
   
+  //Database preparation
+  create_database();
+  $conn = new mysqli($hn, $un, $pw, $db);
+  if ($conn->connect_error) die ($conn->connect_error);
+  create_userfiles_table($conn);
+  
   //Page preparation
   echo <<<_END
   <html>
@@ -31,14 +37,9 @@
         <h1><a href='index.php'>Decryptoid. >_</a></h1>
         <h1 id="blink">|</h1>
         <script src="../js/htimer.js"></script>
-        <script src="../js/control.js"></script>
       </div>
 _END;
   header('Content-Type: text/html; charset=utf-8');
-  create_database();
-  $conn = new mysqli($hn, $un, $pw, $db);
-  if ($conn->connect_error) die ($conn->connect_error);
-  create_userfiles_table($conn);
   
   //Logged in check
   if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true ) {
@@ -157,9 +158,9 @@ _END;
           $_SESSION['lastrowperm'] = $row_perm;
           $_SESSION['lastcolperm'] = $col_perm;
           if ($_POST['encryptordecrypt'] == 'encrypt') {
-            $result = double_transposition($text_file_content, $row_perm, $col_perm);
+            $result = double_transposition_encrypt($text_file_content, $row_perm, $col_perm);
           } else {
-            $result = double_transposition($text_file_content, $row_perm, $col_perm);
+            $result = double_transposition_decrypt($text_file_content, $row_perm, $col_perm);
           }
           echo <<<_END
       <div class="message">
@@ -224,7 +225,12 @@ _END;
     <br><br>
     <input type='radio' name='encryptordecrypt' checked="checked" value='encrypt'>Encrypt
     <input type='radio' name='encryptordecrypt' value='decrypt'>Decrypt
-    <input type='submit' name='submitbutton' value='Submit'><br>
+    <input type='submit' name='submitbutton' value='Submit'><br><br>
+    <p>
+    Note: <br>
+    Only characters a-z, A-Z, and 0-9 are compatible.<br>
+    Text will be cut off if rows * columns > number of characters to encrypt/decrypt for double transposition.
+    </p>
   </form>
   </div>
 _END;

@@ -6,8 +6,7 @@
     <head>
       <title>Decryptoid</title>
       <link rel='stylesheet' href='../css/style.css'>
-      <link rel='shortcut icon' href='../assets/favicon.png'>
-      <script type="text/JavaScript" src="../js/control.js"></script>
+      <link rel='shortcut icon' href='../assets/favicon.png'>  
     </head>
     <body>
       <div class="header">

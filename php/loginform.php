@@ -17,6 +17,24 @@
     different_user();
   }
   
+  //Database preparation
+  create_database();
+  $conn = new mysqli($hn, $un, $pw, $db);
+  if ($conn->connect_error) die ($conn->connect_error);
+  create_database($conn);
+  create_usercredentials_table($conn);
+  
+  $username = $password = "";
+  //Sanitation
+  if (isset($_POST['username']))
+    $username = mysql_entities_fix_string($conn, $_POST['username']);
+  if (isset($_POST['password']))
+    $password = mysql_entities_fix_string($conn, $_POST['password']);
+  
+  //Validation
+  $fail = validate_username($username);
+  $fail .= validate_password($password);
+  
   //Page preparation
   echo <<<_END
   <html>
@@ -24,6 +42,7 @@
       <title>Login Page</title>
       <link rel='stylesheet' href='../css/style.css'>
       <link rel='shortcut icon' href='../assets/favicon.png'>
+      <script src="../js/validation.js"></script>
     </head>
     <body>
     <div class="header">
@@ -31,16 +50,11 @@
         <h1 id="blink">|</h1>
         <script src="../js/htimer.js"></script>
       </div>
+
 _END;
-  create_database();
-  $conn = new mysqli($hn, $un, $pw, $db);
-  if ($conn->connect_error) die ($conn->connect_error);
-  create_database($conn);
-  create_usercredentials_table($conn);
-  
+
   //Logged in already logic
-  if (isset($_SESSION['loggedin'])) {
-    echo <<<_END
+  if (isset($_SESSION['loggedin'])) die (<<<_END
       <div class="message">
           <p><a style="color:red">Already logged in!</a> Click <a href="mainform.php" style="color:blue">here</a> to proceed instead.</p>
           <form method='post' action='loginform.php' accept-charset="UTF-8" enctype='multipart/form-data'>
@@ -48,15 +62,26 @@ _END;
           <input type='submit' name='logoutbutton' value='Logout'><br>
           </form> 
       </div>
-_END;
-  }
+_END
+);
+
+
+  //Validation check
+  if ($fail != "") die (<<<_END
+    <div class="userform">
+      <form method="post" action="loginform.php" onSubmit="return validateLogin(this)">
+        Login here:<br><br>
+        Username: <input type="text" name="username"><br><br>
+        Password: <input type="password" name="password"><br><br>
+        <input type="submit" name="loginbutton" value="Login">
+      </form>
+    </div>
+_END
+);
   
   //Login logic
   if (!isset($_SESSION['loggedin']) && isset($_POST['loginbutton']) 
       && !empty($_POST['username']) && !empty($_POST['password'])) {
-    $username = mysql_entities_fix_string($conn, $_POST['username']);
-    $password = mysql_entities_fix_string($conn, $_POST['password']);
-    
     $stmt = $conn->prepare("SELECT * FROM usercredentials WHERE username=?");
     $stmt->bind_param('s', $username);
     $stmt->execute();
@@ -92,11 +117,11 @@ _END;
   if (!isset($_SESSION['loggedin'])) {
     echo <<<_END
     <div class="userform">
-      <form action="loginform.php" method="post">
-      Login here:<br><br>
-      Username: <input type="text" name="username"><br><br>
-      Password: <input type="password" name="password"><br><br>
-      <input type="submit" name="loginbutton" value="Login">
+      <form method="post" action="loginform.php" onSubmit="return validateLogin(this)">
+        Login here:<br><br>
+        Username: <input type="text" name="username"><br><br>
+        Password: <input type="password" name="password"><br><br>
+        <input type="submit" name="loginbutton" value="Login">
       </form>
     </div>
 _END;
