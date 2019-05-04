@@ -79,7 +79,8 @@ _END;
   <b>Cipher:</b> {$row['cipher']}
     {$row['encordec']}<br>
   <b>Input:</b> {$row['input']}<br>
-  <b>Output:</b> {$row['output']}
+  <b>Output:</b> {$row['output']}<br>
+  <b>Timestamp:</b> {$row['ts']}
   </p>
 _END;
       }

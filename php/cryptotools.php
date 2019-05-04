@@ -23,12 +23,13 @@
   print_r(string_to_alphabet_map("dzprjqnucwtayblshgvmfxekio"));
   */
   
+  /*
   echo bin2hex("hello world")."<br>";
   $encryption = rc4("hello world", "abc");
   echo bin2hex($encryption)."<br>";
   $decryption = rc4($encryption, "abc");
   echo bin2hex($decryption)."<br>";
-  
+  */
   
   //All crypto based functions and helpers
   
@@ -198,90 +199,6 @@
     return $res;
   }
   
-  /*
-  function double_transposition_encrypt($to_encrypt,$row_perm, $col_perm) {  
-    $row_perm = str_replace('(', '', $row_perm);
-    $row_perm = str_replace(')', '', $row_perm);
-    $col_perm = str_replace('(', '', $col_perm);
-    $col_perm = str_replace(')', '', $col_perm);
-    $row_perm = str_replace(' ', '', $row_perm);
-    $col_perm = str_replace(' ', '', $col_perm);
-    $row_perm = explode(',', $row_perm);
-    $num_rows = sizeof($row_perm);
-    $col_perm = explode(',', $col_perm);
-    $num_cols = sizeof($col_perm);
-    
-    $matrix = array();
-    $to_encrypt_index = 0;
-    for ($i=0; $i<$num_rows; $i++) {
-      for ($j=0; $j<$num_cols; $j++) {
-        $matrix[$i][$j] = $to_encrypt[$to_encrypt_index];
-        $to_encrypt_index++;
-      }
-    }
-    
-    $temp_matrix = array();
-    for ($i=0; $i<$num_rows; $i++) {
-      $temp_matrix[$i] = $matrix[$row_perm[$i]];
-    }
-    
-    $res = '';
-    $res_index = 0;
-    for ($i=0; $i<$num_rows; $i++) {
-      for ($j=0; $j<$num_cols; $j++) {
-        if ($temp_matrix[$i][$j] != ' ' && $temp_matrix[$i][$j] != null)
-          $res[$res_index] = $temp_matrix[$i][$j];
-        else 
-          $res[$res_index] = ' ';
-        $res_index++;
-      }
-    }
-    return $res;
-  }
-  
-  function double_transposition_decrypt($to_decrypt, $row_perm, $col_perm) {
-    $row_perm = str_replace('(', '', $row_perm);
-    $row_perm = str_replace(')', '', $row_perm);
-    $col_perm = str_replace('(', '', $col_perm);
-    $col_perm = str_replace(')', '', $col_perm);
-    $row_perm = str_replace(' ', '', $row_perm);
-    $col_perm = str_replace(' ', '', $col_perm);
-    $row_perm = explode(',', $row_perm);
-    $num_rows = sizeof($row_perm);
-    $col_perm = explode(',', $col_perm);
-    $num_cols = sizeof($col_perm);
-    
-    $matrix = array();
-    $to_decrypt_index = 0;
-    for ($i=0; $i<$num_rows; $i++) {
-      for ($j=0; $j<$num_cols; $j++) {
-        $matrix[$i][$j] = $to_decrypt[$to_decrypt_index];
-        $to_decrypt_index++;
-      }
-    }
-    
-    $temp_matrix = array();
-    for ($i=0; $i<$num_rows; $i++) {
-      for ($j=0; $j<$num_cols; $j++) {
-        $temp_matrix[$i][$j] = $matrix[$i][$col_perm[$j]];
-      }
-    }
-    
-    $res = '';
-    $res_index = 0;
-    for ($i=0; $i<$num_rows; $i++) {
-      for ($j=0; $j<$num_cols; $j++) {
-        if ($temp_matrix[$i][$j] != ' ' && $temp_matrix[$i][$j] != null)
-          $res[$res_index] = $temp_matrix[$i][$j];
-        else 
-          $res[$res_index] = ' ';
-        $res_index++;
-      }
-    }
-    return $res;
-  }
-  */
-  
   function RC4($string, $key) {
     $s = array();
     $t = array();
@@ -309,7 +226,7 @@
       $val = $s[$t];
       $res .= $string[$k] ^ chr($val);
     }
-    return bin2hex($res);
+    return $res;
   }
   
 ?>

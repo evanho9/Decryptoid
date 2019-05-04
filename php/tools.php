@@ -59,7 +59,7 @@
   }
   
   function get_text_files_of_user($conn, $user) {
-    $stmt = $conn->prepare("SELECT * FROM userfiles WHERE owner=?");
+    $stmt = $conn->prepare("SELECT * FROM userfiles WHERE owner=? ORDER BY ts DESC");
     $stmt->bind_param('s', $user);
     $stmt->execute();
     $result = $stmt->get_result();

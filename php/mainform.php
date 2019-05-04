@@ -104,9 +104,9 @@ _END;
           $key = mysql_entities_fix_string($conn, $_POST['key']);
           $_SESSION['lastkey'] = $key;
           if ($_POST['encryptordecrypt'] == 'encrypt') {
-            $result = utf8_encode(RC4($text_box_input, $key));
+            $result = RC4($text_box_input, $key);
           } else {
-            $result = utf8_encode(RC4($text_box_input, $key));
+            $result = RC4($text_box_input, $key);
           }
           echo <<<_END
       <div class="message">
@@ -132,7 +132,7 @@ _END;
       $n = "$file_name_without_extension.$ext";
       move_uploaded_file($_FILES['userfile']['tmp_name'], $n);
       $text_file_content = file_get_contents($n) or die("Failed to open $n");
-      $text_file_content = mysql_entities_fix_string($conn, $text_file_content);
+      $text_file_content = strtolower(mysql_entities_fix_string($conn, $text_file_content));
       $cipher_type = mysql_entities_fix_string($conn, $_POST['ciphertype']);
       $encrypt_or_decrypt = mysql_entities_fix_string($conn, $_POST['encryptordecrypt']);
       $result = "Encrypt/decrypt not successful";
@@ -148,7 +148,7 @@ _END;
           }
           echo <<<_END
       <div class="message">
-          <p><a style="color:red">Input receieved, $cipher_type was used to $encrypt_or_decrypt with key: $key</a></p>
+          <p><a style="color:red">Input: [ $text_file_content ] receieved, $cipher_type was used to $encrypt_or_decrypt with key: $key</a></p>
           <p>$result</p>
       </div>
 _END;
@@ -165,7 +165,7 @@ _END;
           }
           echo <<<_END
       <div class="message">
-      <p><a style="color:red">Input receieved, $cipher_type was used to $encrypt_or_decrypt with key: $row_perm and $col_perm</a></p>
+      <p><a style="color:red">Input: [ $text_file_content ] receieved, $cipher_type was used to $encrypt_or_decrypt with key: $row_perm and $col_perm</a></p>
           <p>$result</p>
       </div>
 _END;
@@ -174,13 +174,13 @@ _END;
           $key = mysql_entities_fix_string($conn, $_POST['key']);
           $_SESSION['lastkey'] = $key;
           if ($_POST['encryptordecrypt'] == 'encrypt') {
-            $result = utf8_encode(RC4($text_file_content, $key));
+            $result = RC4($text_file_content, $key);
           } else {
-            $result = utf8_encode(RC4($text_file_content, $key));
+            $result = RC4($text_file_content, $key);
           }
           echo <<<_END
       <div class="message">
-          <p><a style="color:red">Input receieved, $cipher_type was used to $encrypt_or_decrypt with key: $key</a></p>
+          <p><a style="color:red">Input: [ $text_file_content ] receieved, $cipher_type was used to $encrypt_or_decrypt with key: $key</a></p>
           <p>$result</p>
       </div>
 _END;
@@ -215,7 +215,7 @@ _END;
     Cipher Type: <select id="cipherselector" name="ciphertype">
       <option value="substitution">Substitution</option>
       <option value="double transposition">Double Transposition</option>
-      <option value="rc4">RC4</option>
+      <option value="RC4">RC4</option>
     </select>
     <br><br>
     Key: <input id="key" name="key" size="27" maxchars="26" value="abcdefghijklmnopqrstuvwxyz" type="text">
