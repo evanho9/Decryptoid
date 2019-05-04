@@ -230,7 +230,7 @@ _END;
     <input type='submit' name='submitbutton' value='Submit'><br><br>
     <p><br><br><br>
     <b>Simple Substitution Format Example:</b><br>
-    Key: odeykrqbhasngucvwximfjltpz
+    Key: odeykrqbhasngucvwximfjltpz<br>
     Note: Alphabet must be 26 characters and input should consist of a-z or A-Z only.<br><br>
     </p>
     <p>
