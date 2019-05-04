@@ -23,12 +23,12 @@
   print_r(string_to_alphabet_map("dzprjqnucwtayblshgvmfxekio"));
   */
   
-  /*
+  echo bin2hex("hello world")."<br>";
   $encryption = rc4("hello world", "abc");
-  echo $encryption;
+  echo bin2hex($encryption)."<br>";
   $decryption = rc4($encryption, "abc");
-  echo $decryption;
-  */
+  echo bin2hex($decryption)."<br>";
+  
   
   //All crypto based functions and helpers
   
@@ -309,7 +309,7 @@
       $val = $s[$t];
       $res .= $string[$k] ^ chr($val);
     }
-    return $res;
+    return bin2hex($res);
   }
   
 ?>

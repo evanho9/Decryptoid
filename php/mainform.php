@@ -31,6 +31,7 @@
       <link rel='stylesheet' href='../css/style.css'>
       <link rel='shortcut icon' href='../assets/favicon.png'>
       <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+      <script src="../js/control.js"></script>
     </head>
     <body>
       <div class="header">
@@ -214,11 +215,11 @@ _END;
     Cipher Type: <select id="cipherselector" name="ciphertype">
       <option value="substitution">Substitution</option>
       <option value="double transposition">Double Transposition</option>
-      <option value="RC4">RC4</option>
+      <option value="rc4">RC4</option>
     </select>
     <br><br>
     Key: <input id="key" name="key" size="27" maxchars="26" value="abcdefghijklmnopqrstuvwxyz" type="text">
-    <input name="generateKey" value="Generate Random Key" onclick="GenRandKey()" type="button">
+    <input name="generateKey" value="Generate Random Key" onclick="genRandKey()" type="button">
     <br><br>
     Row Permutation: <input id='rowperm' name='rowperm' value="0,1,2"" type='text'>
     Column Permutation: <input id="colperm" name="colperm" value="0,1,2,3" type="text">
