@@ -228,7 +228,7 @@ _END;
     <input type='radio' name='encryptordecrypt' checked="checked" value='encrypt'>Encrypt
     <input type='radio' name='encryptordecrypt' value='decrypt'>Decrypt
     <input type='submit' name='submitbutton' value='Submit'><br><br>
-    <p>
+    <p><br><br><br>
     <b>Simple Substitution Format Example:</b><br>
     Key: odeykrqbhasngucvwximfjltpz
     Note: Alphabet must be 26 characters and input should consist of a-z or A-Z only.<br><br>
@@ -241,7 +241,7 @@ _END;
     </p>
     <p>
     <b>RC4 Format Example:</b><br>
-    Key: c50e93af7db81246
+    Key: c50e93af7db81246<br>
     Note: DOESN'T WORK.<br><br>
     </p>
   </form>
