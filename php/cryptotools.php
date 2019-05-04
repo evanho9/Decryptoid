@@ -24,11 +24,10 @@
   */
   
   /*
-  echo bin2hex("hello world")."<br>";
-  $encryption = rc4("hello world", "abc");
-  echo bin2hex($encryption)."<br>";
-  $decryption = rc4($encryption, "abc");
-  echo bin2hex($decryption)."<br>";
+  $encryption = rc4asd("hello world", "abc");
+  echo $encryption."<br>";
+  $decryption = rc4asd($encryption, "abc");
+  echo $decryption."<br>";
   */
   
   //All crypto based functions and helpers

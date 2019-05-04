@@ -40,3 +40,17 @@ function validateEmail(field) {
     return "The Email address is invalid.\n"
   return ""
 }
+
+function validateSubKey(form) {
+  field = form.key.value
+  fail = ""
+  numCharacters = 26
+  if (field == "") 
+    fail += "No key was entered.\n"
+  else if (field.length != numCharacters)
+    fail += "Alphabet must be " + numCharacters + " characters.\n"
+  else if (/[^a-zA-Z0-9_-]/.test(field))
+    fail += "Only a-z, A-Z, 0-9, - and _ allowed in alphabet.\n"
+  if (fail == "") return true
+  else { alert(fail); return false }
+}

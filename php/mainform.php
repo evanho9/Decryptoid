@@ -32,6 +32,7 @@
       <link rel='shortcut icon' href='../assets/favicon.png'>
       <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
       <script src="../js/control.js"></script>
+      <script src="../js/validation.js"></script>
     </head>
     <body>
       <div class="header">
@@ -205,7 +206,7 @@ _END;
     <input type='submit' name='logoutbutton' value='Logout'>
   </form> 
   <br>
-  <form method='post' action='mainform.php' accept-charset="UTF-8" enctype='multipart/form-data'>
+  <form method='post' action='mainform.php' accept-charset="UTF-8" enctype='multipart/form-data' onSubmit="return validateSubKey(this)">
     <textarea name="textinput" cols="100" rows="10" style="border: 1px solid red" style="padding:5px" placeholder="Enter plaintext/ciphertext here..."></textarea>
     <br><br>
     Or Select a .txt File: <input type='file' name='userfile' size='16'>
@@ -228,9 +229,20 @@ _END;
     <input type='radio' name='encryptordecrypt' value='decrypt'>Decrypt
     <input type='submit' name='submitbutton' value='Submit'><br><br>
     <p>
-    Note: <br>
-    Only characters a-z, A-Z, and 0-9 are compatible.<br>
-    Text will be cut off if rows * columns > number of characters to encrypt/decrypt for double transposition.
+    <b>Simple Substitution Format Example:</b><br>
+    Key: odeykrqbhasngucvwximfjltpz
+    Note: Alphabet must be 26 characters and input should consist of a-z or A-Z only.<br><br>
+    </p>
+    <p>
+    <b>Double Transposition Format Example:</b><br>
+    Row: 1,0,2<br>
+    Column: 2,3,1,0<br>
+    Note: Text will be cut off if rows * columns > number of characters to encrypt/decrypt for double transposition.<br><br>
+    </p>
+    <p>
+    <b>RC4 Format Example:</b><br>
+    Key: c50e93af7db81246
+    Note: DOESN'T WORK.<br><br>
     </p>
   </form>
   </div>
