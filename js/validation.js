@@ -57,3 +57,26 @@ function validateSubKey(form) {
   if (fail == "") return true
   else { alert(fail); return false }
 }
+
+function validateDTKey(form) {
+  fail = validateRowPerm(form.rowperm.value)
+  fail += validateColPerm(form.colperm.value)
+  if (fail == "") return true
+  else { alert(fail); return false }
+}
+
+function validateRowPerm(field) {
+  field = field + "";
+  if (field.replace(/\s/g, "") == "") return "No row permutation was entered.\n"
+  else if (!(/[0-9]+(,[0-9]+)*/.test(field)))
+     return "The row permutation is invalid.\n"
+  return ""
+}
+
+function validateColPerm(field) {
+  field = field + "";
+  if (field.replace(/\s/g, "") == "") return "No column permutation was entered.\n"
+  else if (!(/[0-9]+(,[0-9]+)*/.test(field)))
+     return "The column permutation in invalid.\n"
+  return ""
+}
