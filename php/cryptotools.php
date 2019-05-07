@@ -63,7 +63,6 @@
     $res = str_repeat(" ", sizeOf($to_decrypt));
     for ($i=0; $i<sizeOf($to_decrypt); $i++) {
       if ($to_decrypt[$i] != ' ' && $to_decrypt[$i] != null && $alphabet[$to_decrypt[$i]] != null && $alphabet[$to_decrypt[$i]] != ' ') {
-        
         $res[$i] = array_search($to_decrypt[$i], $alphabet);
       }
     }

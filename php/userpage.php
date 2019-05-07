@@ -53,6 +53,7 @@ _END;
 _END;
   }
 
+  //Clearing user history logic
   if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true
       && isset($_POST['clearbutton'])) {
     $user = $_SESSION['username'];
@@ -92,17 +93,6 @@ _END;
 _END;
     }
     echo "</div>";
-  } else {
-    /*
-      echo <<<_END
-<div class="message">
-  <pre>
-  You are not currently logged in.
-  <a href='../php/loginform.php'">Login</a> or register in order to see your files or upload more:
-  </pre>
-</div>
-_END;
-*/
   }
 
   //End duties

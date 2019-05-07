@@ -1,6 +1,7 @@
 <?php
   require_once 'login.php';
   require_once 'tools.php';
+  require_once 'validation.php';
   
   session_start();
   
