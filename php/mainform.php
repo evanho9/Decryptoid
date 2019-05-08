@@ -60,50 +60,58 @@ _END;
       && isset($_POST['submitbutton']) && !empty($_POST['textinput']) 
       && !is_uploaded_file($_FILES['userfile']['tmp_name']) 
       && isset($_POST['ciphertype']) && isset($_POST['encryptordecrypt'])) {
+        
       $text_box_input = strtolower(mysql_entities_fix_string($conn, $_POST['textinput']));
-      $_SESSION['lasttextinput'] = $text_box_input;
+      
       $cipher_type = mysql_entities_fix_string($conn, $_POST['ciphertype']);
       $encrypt_or_decrypt = mysql_entities_fix_string($conn, $_POST['encryptordecrypt']);
+      
       $result = "Encrypt/decrypt not successful";
       switch ($cipher_type) {
         case 'substitution':
           $key =  strtolower(mysql_entities_fix_string($conn, $_POST['key']));
-          $_SESSION['lastkey'] = $key;
-          $alphabet = string_to_alphabet_map(mysql_entities_fix_string($conn, $_POST['key']));
-          if ($_POST['encryptordecrypt'] == 'encrypt') {
-            $result = substitution_encrypt($text_box_input, $alphabet);
-          } else {
-            $result = substitution_decrypt($text_box_input, $alphabet);
-          }
-          echo <<<_END
-      <div class="message">
-          <p><a style="color:red">Input: [ $text_box_input ] receieved, $cipher_type was used to $encrypt_or_decrypt with key: $key</a></p>
-          <p>$result</p>
-      </div>
+          $fail = validate_sub($key);
+          if ($fail != "") 
+            echo ("<div class='message'><p><a style='color:red'>$fail</a></p></div>");
+          else {
+            $alphabet = string_to_alphabet_map(mysql_entities_fix_string($conn, $_POST['key']));
+            if ($_POST['encryptordecrypt'] == 'encrypt') {
+              $result = substitution_encrypt($text_box_input, $alphabet);
+            } else {
+              $result = substitution_decrypt($text_box_input, $alphabet);
+            }
+            echo <<<_END
+        <div class="message">
+            <p><a style="color:red">Input: [ $text_box_input ] receieved, $cipher_type was used to $encrypt_or_decrypt with key: $key</a></p>
+            <p>$result</p>
+        </div>
 _END;
+          }
           break;
         case 'double transposition':
           $row_perm = mysql_entities_fix_string($conn, $_POST['rowperm']);
           $row_perm = str_replace(' ', '', $row_perm);
           $col_perm = mysql_entities_fix_string($conn, $_POST['colperm']);
           $col_perm = str_replace(' ', '', $col_perm);
-          $_SESSION['lastrowperm'] = $row_perm;
-          $_SESSION['lastcolperm'] = $col_perm;
-          if ($_POST['encryptordecrypt'] == 'encrypt') {
-            $result = double_transposition_encrypt($text_box_input, $row_perm, $col_perm);
-          } else {
-            $result = double_transposition_decrypt($text_box_input, $row_perm, $col_perm);
-          }
-          echo <<<_END
-      <div class="message">
-      <p><a style="color:red">Input: [ $text_box_input ] receieved, $cipher_type was used to $encrypt_or_decrypt with key: Row permuations: ($row_perm) and Column permuations: ($col_perm)</a></p>
-          <p>$result</p>
-      </div>
+          $fail = validate_DT($row_perm, $col_perm);
+          if ($fail != "") 
+            echo ("<div class='message'><p><a style='color:red'>$fail</a></p></div>");
+          else {
+            if ($_POST['encryptordecrypt'] == 'encrypt') {
+              $result = double_transposition_encrypt($text_box_input, $row_perm, $col_perm);
+            } else {
+              $result = double_transposition_decrypt($text_box_input, $row_perm, $col_perm);
+            }
+            echo <<<_END
+        <div class="message">
+        <p><a style="color:red">Input: [ $text_box_input ] receieved, $cipher_type was used to $encrypt_or_decrypt with key: Row permuations: ($row_perm) and Column permuations: ($col_perm)</a></p>
+            <p>$result</p>
+        </div>
 _END;
+          }
           break;
         case 'RC4':
           $key = mysql_entities_fix_string($conn, $_POST['key']);
-          $_SESSION['lastkey'] = $key;
           if ($_POST['encryptordecrypt'] == 'encrypt') {
             $result = RC4($text_box_input, $key);
           } else {
@@ -140,40 +148,48 @@ _END;
       switch ($cipher_type) {
         case 'substitution':
           $key =  strtolower(mysql_entities_fix_string($conn, $_POST['key']));
-          $_SESSION['lastkey'] = $key;
-          $alphabet = string_to_alphabet_map(mysql_entities_fix_string($conn, $_POST['key']));
-          if ($_POST['encryptordecrypt'] == 'encrypt') {
-            $result = substitution_encrypt($text_file_content, $alphabet);
-          } else {
-            $result = substitution_decrypt($text_file_content, $alphabet);
-          }
-          echo <<<_END
-      <div class="message">
-          <p><a style="color:red">Input: [ $text_file_content ] receieved, $cipher_type was used to $encrypt_or_decrypt with key: $key</a></p>
-          <p>$result</p>
-      </div>
+          $fail = validate_sub($key);
+          if ($fail != "") 
+            echo ("<div class='message'><p><a style='color:red'>$fail</a></p></div>");
+          else {
+            $alphabet = string_to_alphabet_map(mysql_entities_fix_string($conn, $_POST['key']));
+            if ($_POST['encryptordecrypt'] == 'encrypt') {
+              $result = substitution_encrypt($text_file_content, $alphabet);
+            } else {
+              $result = substitution_decrypt($text_file_content, $alphabet);
+            }
+            echo <<<_END
+        <div class="message">
+            <p><a style="color:red">Input: [ $text_file_content ] receieved, $cipher_type was used to $encrypt_or_decrypt with key: $key</a></p>
+            <p>$result</p>
+        </div>
 _END;
+          }
           break;
         case 'double transposition':
           $row_perm = mysql_entities_fix_string($conn, $_POST['rowperm']);
+          $row_perm = str_replace(' ', '', $row_perm);
           $col_perm = mysql_entities_fix_string($conn, $_POST['colperm']);
-          $_SESSION['lastrowperm'] = $row_perm;
-          $_SESSION['lastcolperm'] = $col_perm;
-          if ($_POST['encryptordecrypt'] == 'encrypt') {
-            $result = double_transposition_encrypt($text_file_content, $row_perm, $col_perm);
-          } else {
-            $result = double_transposition_decrypt($text_file_content, $row_perm, $col_perm);
-          }
-          echo <<<_END
-      <div class="message">
-      <p><a style="color:red">Input: [ $text_file_content ] receieved, $cipher_type was used to $encrypt_or_decrypt with key: $row_perm and $col_perm</a></p>
-          <p>$result</p>
-      </div>
+          $col_perm = str_replace(' ', '', $col_perm);
+          $fail = validate_DT($row_perm, $col_perm);
+          if ($fail != "") 
+            echo ("<div class='message'><p><a style='color:red'>$fail</a></p></div>");
+          else {
+            if ($_POST['encryptordecrypt'] == 'encrypt') {
+              $result = double_transposition_encrypt($text_file_content, $row_perm, $col_perm);
+            } else {
+              $result = double_transposition_decrypt($text_file_content, $row_perm, $col_perm);
+            }
+            echo <<<_END
+        <div class="message">
+        <p><a style="color:red">Input: [ $text_file_content ] receieved, $cipher_type was used to $encrypt_or_decrypt with key: $row_perm and $col_perm</a></p>
+            <p>$result</p>
+        </div>
 _END;
+          }
           break;
         case 'RC4':
           $key = mysql_entities_fix_string($conn, $_POST['key']);
-          $_SESSION['lastkey'] = $key;
           if ($_POST['encryptordecrypt'] == 'encrypt') {
             $result = RC4($text_file_content, $key);
           } else {
@@ -206,14 +222,14 @@ _END;
     <input type='submit' name='logoutbutton' value='Logout'>
   </form> 
   <br>
-  <form method='post' action='mainform.php' accept-charset="UTF-8" enctype='multipart/form-data' onSubmit="return validateSubKey(this)">
+  <form method='post' action='mainform.php' enctype='multipart/form-data' onSubmit="return validateCrypto(this)">
     <textarea name="textinput" cols="100" rows="10" style="border: 1px solid red" style="padding:5px" placeholder="Enter plaintext/ciphertext here..."></textarea>
     <br><br>
     Or Select a .txt File: <input type='file' name='userfile' size='16'>
     <br><br><br><br><br><br><br>
     Cipher Options:
     <br><br>
-    Cipher Type: <select id="cipherselector" name="ciphertype">
+    Cipher Type: <select id="ciphertype" name="ciphertype">
       <option value="substitution">Substitution</option>
       <option value="double transposition">Double Transposition</option>
       <option value="RC4">RC4</option>
@@ -237,7 +253,7 @@ _END;
     <b>Double Transposition Format Example:</b><br>
     Row: 1,0,2<br>
     Column: 2,3,1,0<br>
-    Note: Text will be cut off if rows * columns > number of characters to encrypt/decrypt for double transposition.<br><br>
+    Note: Text will be cut off if rows * columns > number of characters to encrypt/decrypt for double transposition.<br> Whitespace will also be ignored.<br><br>
     </p>
     <p>
     <b>RC4 Format Example:</b><br>

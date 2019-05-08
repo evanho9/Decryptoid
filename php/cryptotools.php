@@ -227,4 +227,19 @@
     return $res;
   }
   
+  function validate_sub($key) {  
+    $num_characters = 26;
+    if (preg_replace('/\s+/', '', $key) == '') return "No alphabet was entered<br>";
+    else if (strlen($key) != $num_characters)
+      return "Alphabet must be $num_characters characters<br>";
+    else if (preg_match("/[^a-zA-Z]/", $key))
+      return "Only letters a-z and A-Z allowed<br>";
+    return "";
+  }
+  
+  function validate_DT($row_perm, $col_perm) {  
+    if (preg_replace('/\s+/', '', $row_perm) == '') return "No row permutation was entered<br>";
+    else if (preg_replace('/\s+/', '', $col_perm) == '') return "No column permutation was entered<br>";
+    return "";
+  }
 ?>

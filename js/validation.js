@@ -44,25 +44,30 @@ function validateEmail(field) {
   return ""
 }
 
-function validateSubKey(form) {
-  field = form.key.value
+function validateCrypto(form) {
   fail = ""
-  numCharacters = 26
-  if (field.replace(/\s/g, "") == "") 
-    fail += "No key was entered.\n"
-  else if (field.length != numCharacters)
-    fail += "Alphabet must be " + numCharacters + " characters.\n"
-  else if (/[^a-zA-Z0-9_-]/.test(field))
-    fail += "Only a-z, A-Z, 0-9, - and _ allowed in alphabet.\n"
+  if (form.ciphertype.value == "substitution")
+    fail += validateSubKey(form.key.value)
+  if (form.ciphertype.value == "double transposition") {
+    fail += validateRowPerm(form.rowperm.value)
+    fail += validateColPerm(form.colperm.value)
+  }
+  if (form.ciphertype.value == "RC4") {
+    
+  }
   if (fail == "") return true
   else { alert(fail); return false }
 }
 
-function validateDTKey(form) {
-  fail = validateRowPerm(form.rowperm.value)
-  fail += validateColPerm(form.colperm.value)
-  if (fail == "") return true
-  else { alert(fail); return false }
+function validateSubKey(field) {
+  numCharacters = 26
+  if (field.replace(/\s/g, "") == "") 
+    return "No key was entered.\n"
+  else if (field.length != numCharacters)
+    return "Alphabet must be " + numCharacters + " characters.\n"
+  else if (/[^a-zA-Z0-9_-]/.test(field))
+    return "Only a-z, A-Z, 0-9, - and _ allowed in alphabet.\n"
+  return ""
 }
 
 function validateRowPerm(field) {
