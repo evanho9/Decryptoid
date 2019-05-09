@@ -67,7 +67,10 @@ _END
 );
 
   //Validation check
-  if ($fail != "") die (<<<_END
+  if ($fail != "" && isset($_POST['loginbutton'])) die (<<<_END
+    <div class="message">
+      $fail
+    </div>
     <div class="userform">
       <form method="post" action="loginform.php" onSubmit="return validateLogin(this)">
         Login here:<br><br>

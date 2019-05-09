@@ -20,9 +20,8 @@
   }
   
   function validate_email($field) {
-    if (preg_replace('/\s+/', '', $field) == '') return "No email was entered<br>";
-    else if (!((strpos($field, ".") > 0) && (strpos($field, "@") > 0))
-            || preg_match("/[^a-zA-Z0-9.@_-]", $field))
+    if (preg_replace('/\s+/', '', $field) == '') return "No email was entered<br>"; 
+    else if (!preg_match("/\S+@\S+\.\S+/", $field))
       return "The email address is invalid<br>";
     return "";
   }

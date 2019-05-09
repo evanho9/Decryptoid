@@ -37,7 +37,7 @@
   $fail = validate_username($username);
   $fail .= validate_password($password);
   $fail .= validate_email($email);
-  
+
   //Page preparation
   echo <<<_END
   <html>
@@ -68,7 +68,10 @@ _END
 );
   
   //Validation check
-  if ($fail != "") die (<<<_END
+  if ($fail != "" && isset($_POST['registerbutton'])) die (<<<_END
+    <div class="message">
+      $fail
+    </div>
     <div class="userform">
       <form method="post" action="registerform.php" onSubmit="return validateRegistration(this)">
       Register here:<br><br>
