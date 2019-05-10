@@ -81,7 +81,7 @@ body {
   text-align: center;
   margin-top: 5%;
   margin-bottom: 5%;
-  position: relative;
+  position: sticky;
   top: 5%;
   text-overflow: ellipsis;
   word-wrap: break-word;  

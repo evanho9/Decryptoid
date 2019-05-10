@@ -62,18 +62,16 @@ _END;
       && isset($_POST['ciphertype']) && isset($_POST['encryptordecrypt'])) {
         
       $text_box_input = $_POST['textinput'];
-      
       $cipher_type = $_POST['ciphertype'];
       $encrypt_or_decrypt = $_POST['encryptordecrypt'];
       
       $result = "Encrypt/decrypt not successful";
+      $fail = "";
       switch ($cipher_type) {
         case 'substitution':
-          $key =  strtolower(mysql_entities_fix_string($conn, $_POST['key']));
+          $key =  $_POST['key'];
           $fail = validate_sub($key);
-          if ($fail != "") 
-            echo ("<div class='message'><p><a style='color:red'>$fail</a></p></div>");
-          else {
+          if ($fail == "") {
             $alphabet = string_to_alphabet_map(mysql_entities_fix_string($conn, $_POST['key']));
             if ($_POST['encryptordecrypt'] == 'encrypt') {
               $result = substitution_encrypt($text_box_input, $alphabet);
@@ -89,14 +87,12 @@ _END;
           }
           break;
         case 'double transposition':
-          $row_perm = mysql_entities_fix_string($conn, $_POST['rowperm']);
+          $row_perm = $_POST['rowperm'];
           $row_perm = str_replace(' ', '', $row_perm);
-          $col_perm = mysql_entities_fix_string($conn, $_POST['colperm']);
+          $col_perm = $_POST['colperm'];
           $col_perm = str_replace(' ', '', $col_perm);
           $fail = validate_DT($row_perm, $col_perm);
-          if ($fail != "") 
-            echo ("<div class='message'><p><a style='color:red'>$fail</a></p></div>");
-          else {
+          if ($fail == "") {
             if ($_POST['encryptordecrypt'] == 'encrypt') {
               $result = double_transposition_encrypt($text_box_input, $row_perm, $col_perm);
             } else {
@@ -112,19 +108,24 @@ _END;
           break;
         case 'RC4':
           $key = $_POST['key'];
-          if ($_POST['encryptordecrypt'] == 'encrypt') {
-            $result = RC4($text_box_input, $key);
-          } else {
-            $result = RC4($text_box_input, $key);
-          }
-          echo <<<_END
-      <div class="message">
-          <p><a style="color:red">Input:<br>$text_box_input<br>$cipher_type was used to $encrypt_or_decrypt with key: $key</a></p>
-          <p>$result</p>
-      </div>
+          $fail = validate_RC4($row_perm, $col_perm);
+          if ($fail == "") {
+            if ($_POST['encryptordecrypt'] == 'encrypt') {
+              $result = RC4($text_box_input, $key);
+            } else {
+              $result = RC4($text_box_input, $key);
+            }
+            echo <<<_END
+        <div class="message">
+            <p><a style="color:red">Input:<br>$text_box_input<br>$cipher_type was used to $encrypt_or_decrypt with key: $key</a></p>
+            <p>$result</p>
+        </div>
 _END;
+          }
           break;
       }
+      if ($fail != "") 
+        echo ("<div class='message'><p><a style='color:red'>$fail</a></p></div>");
       $text_box_input = mysql_entities_fix_string($conn, $text_box_input);
       store_content($conn, $_SESSION['username'], $cipher_type, $encrypt_or_decrypt, $text_box_input, $result);
   }
@@ -259,7 +260,7 @@ _END;
     <p>
     <b>RC4 Format Example:</b><br>
     Key: c50e93af7db81246<br>
-    Note: DOESN'T WORK.<br><br>
+   <br><br>
     </p>
   </form>
   </div>
