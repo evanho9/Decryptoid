@@ -61,10 +61,10 @@ _END;
       && !is_uploaded_file($_FILES['userfile']['tmp_name']) 
       && isset($_POST['ciphertype']) && isset($_POST['encryptordecrypt'])) {
         
-      $text_box_input = strtolower(mysql_entities_fix_string($conn, $_POST['textinput']));
+      $text_box_input = $_POST['textinput'];
       
-      $cipher_type = mysql_entities_fix_string($conn, $_POST['ciphertype']);
-      $encrypt_or_decrypt = mysql_entities_fix_string($conn, $_POST['encryptordecrypt']);
+      $cipher_type = $_POST['ciphertype'];
+      $encrypt_or_decrypt = $_POST['encryptordecrypt'];
       
       $result = "Encrypt/decrypt not successful";
       switch ($cipher_type) {
@@ -82,7 +82,7 @@ _END;
             }
             echo <<<_END
         <div class="message">
-            <p><a style="color:red">Input: [ $text_box_input ] receieved, $cipher_type was used to $encrypt_or_decrypt with key: $key</a></p>
+            <p><a style="color:red">Input:<br>$text_box_input<br>$cipher_type was used to $encrypt_or_decrypt with key: $key</a></p>
             <p>$result</p>
         </div>
 _END;
@@ -104,14 +104,14 @@ _END;
             }
             echo <<<_END
         <div class="message">
-        <p><a style="color:red">Input: [ $text_box_input ] receieved, $cipher_type was used to $encrypt_or_decrypt with key: Row permuations: ($row_perm) and Column permuations: ($col_perm)</a></p>
+        <p><a style="color:red">Input:<br>$text_box_input<br>$cipher_type was used to $encrypt_or_decrypt with key: Row permuations: ($row_perm) and Column permuations: ($col_perm)</a></p>
             <p>$result</p>
         </div>
 _END;
           }
           break;
         case 'RC4':
-          $key = mysql_entities_fix_string($conn, $_POST['key']);
+          $key = $_POST['key'];
           if ($_POST['encryptordecrypt'] == 'encrypt') {
             $result = RC4($text_box_input, $key);
           } else {
@@ -119,12 +119,13 @@ _END;
           }
           echo <<<_END
       <div class="message">
-          <p><a style="color:red">Input: [ $text_box_input ] receieved, $cipher_type was used to $encrypt_or_decrypt with key: $key</a></p>
+          <p><a style="color:red">Input:<br>$text_box_input<br>$cipher_type was used to $encrypt_or_decrypt with key: $key</a></p>
           <p>$result</p>
       </div>
 _END;
           break;
       }
+      $text_box_input = mysql_entities_fix_string($conn, $text_box_input);
       store_content($conn, $_SESSION['username'], $cipher_type, $encrypt_or_decrypt, $text_box_input, $result);
   }
   
@@ -160,7 +161,7 @@ _END;
             }
             echo <<<_END
         <div class="message">
-            <p><a style="color:red">Input: [ $text_file_content ] receieved, $cipher_type was used to $encrypt_or_decrypt with key: $key</a></p>
+            <p><a style="color:red">Input:<br>$text_file_content<br>$cipher_type was used to $encrypt_or_decrypt with key: $key</a></p>
             <p>$result</p>
         </div>
 _END;
@@ -182,7 +183,7 @@ _END;
             }
             echo <<<_END
         <div class="message">
-        <p><a style="color:red">Input: [ $text_file_content ] receieved, $cipher_type was used to $encrypt_or_decrypt with key: $row_perm and $col_perm</a></p>
+        <p><a style="color:red">Input:<br>$text_file_content<br>$cipher_type was used to $encrypt_or_decrypt with key: $row_perm and $col_perm</a></p>
             <p>$result</p>
         </div>
 _END;
@@ -197,7 +198,7 @@ _END;
           }
           echo <<<_END
       <div class="message">
-          <p><a style="color:red">Input: [ $text_file_content ] receieved, $cipher_type was used to $encrypt_or_decrypt with key: $key</a></p>
+          <p><a style="color:red">Input:<br>$text_file_content<br>$cipher_type was used to $encrypt_or_decrypt with key: $key</a></p>
           <p>$result</p>
       </div>
 _END;

@@ -23,12 +23,12 @@
   print_r(string_to_alphabet_map("dzprjqnucwtayblshgvmfxekio"));
   */
   
-  /*
-  $encryption = rc4asd("hello world", "abc");
-  echo $encryption."<br>";
-  $decryption = rc4asd($encryption, "abc");
-  echo $decryption."<br>";
-  */
+  
+  $encryption = RC4("hello world", "12");
+  echo $encryption . "<br>";
+  $decryption = RC4($encryption, "12");
+  echo $decryption . "<br>";
+  
   
   //All crypto based functions and helpers
   
@@ -198,6 +198,8 @@
   }
   
   function RC4($string, $key) {
+    $string = (string)$string;
+    $key = (string)$key;
     $s = array();
     $t = array();
     for ($i=0; $i<256; $i++) {
@@ -222,9 +224,9 @@
       $s[$j] = $swap_temp;
       $t = ($s[$i] + $s[$k]) % 256;
       $val = $s[$t];
-      $res .= $string[$k] ^ chr($val);
+      $res .= $string[$k] ^ utf8_decode(chr($val));
     }
-    return $res;
+    return strtolower($res);
   }
   
   function validate_sub($key) {  
