@@ -230,8 +230,8 @@ _END;
     <textarea name="textinput" cols="100" rows="10" style="border: 1px solid red" style="padding:5px" placeholder="Enter plaintext/ciphertext here..."></textarea>
     <br><br>
     Or Select a .txt File: <input type='file' name='userfile' size='16'>
-    <br><br><br><br><br><br><br>
-    Cipher Options:
+    <br><br><br><br>
+    <b>Cipher Options:</b>
     <br><br>
     Cipher Type: <select id="ciphertype" name="ciphertype">
       <option value="substitution">Substitution</option>
@@ -239,29 +239,32 @@ _END;
       <option value="RC4">RC4</option>
     </select>
     <br><br>
-    Key: <input id="key" name="key" size="27" maxchars="26" value="abcdefghijklmnopqrstuvwxyz" type="text">
+    Key: <input id="key" name="key" size="27" maxchars="26" placeholder="abcdefghijklmnopqrstuvwxyz" type="text">
     <input name="generateKey" value="Generate Random Key" onclick="genRandKey()" type="button">
     <br><br>
-    Row Permutation: <input id='rowperm' name='rowperm' value="0,1,2"" type='text'>
-    Column Permutation: <input id="colperm" name="colperm" value="0,1,2,3" type="text">
+    Row Permutation: <input id='rowperm' name='rowperm' placeholder="0,1,2"" type='text'>
+    Column Permutation: <input id="colperm" name="colperm" placeholder="0,1,2,3" type="text">
     <br><br>
     <input type='radio' name='encryptordecrypt' checked="checked" value='encrypt'>Encrypt
     <input type='radio' name='encryptordecrypt' value='decrypt'>Decrypt
     <input type='submit' name='submitbutton' value='Submit'><br><br>
-    <p><br><br><br>
+    <p><br>
     <b>Simple Substitution Format Example:</b><br>
     Key: odeykrqbhasngucvwximfjltpz<br>
-    Note: Alphabet must be 26 characters and input should consist of a-z or A-Z only.<br><br>
+    Note: Alphabet must be 26 characters and input should consist of a-z or A-Z only.<br>
+    Capitalization and new lines will be ignored<br><br>
     </p>
     <p>
     <b>Double Transposition Format Example:</b><br>
     Row: 1,0,2<br>
     Column: 2,3,1,0<br>
-    Note: Text will be cut off if rows * columns > number of characters to encrypt/decrypt for double transposition.<br> Whitespace will also be ignored.<br><br>
+    Note: Text will be cut off if rows * columns > number of characters to encrypt/decrypt for double transposition.<br> 
+    Whitespace, capitalization, and new lines will be ignored.<br><br>
     </p>
     <p>
     <b>RC4 Format Example:</b><br>
     Key: c50e93af7db81246<br>
+    Note: Capitalization and new lines will be ignored.
    <br><br>
     </p>
   </form>
