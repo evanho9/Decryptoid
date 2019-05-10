@@ -23,6 +23,10 @@ input[type=button], input[type=submit], input[type=reset], input[type=file] {
   cursor: pointer;
 }
 
+select {
+  outline-color: white;
+}
+
 .mainform a {
   color: red;
 }

@@ -44,10 +44,7 @@ _END;
   header('Content-Type: text/html; charset=utf-8');
   
   //Logged in check
-  if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true ) {
-    //$logged_in = true;
-    //destroy_session_and_data();
-  } else {
+  if (!(isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true )) {
       echo <<<_END
       <div class="message">
           <p><a style="color:red">Not logged in/Session not valid!</a> Click <a href="loginform.php">here</a> to login!</p>
@@ -132,10 +129,11 @@ _END;
       store_content($conn, $_SESSION['username'], $cipher_type, $encrypt_or_decrypt, $text_box_input, $result);
   }
   
-  //Upload file logic and file crypto logic
+  //File crypto logic and upload
   if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] == true 
       && isset($_POST['submitbutton']) && is_uploaded_file($_FILES['userfile']['tmp_name']) 
       && isset($_POST['ciphertype']) && isset($_POST['encryptordecrypt'])) {
+        
     $file_name_without_extension = mysql_entities_fix_string($conn, pathinfo($_FILES['userfile']['name'], PATHINFO_FILENAME));
     switch ($_FILES['userfile']['type']) {
       case 'text/plain' : $ext = 'txt'; break;
@@ -145,17 +143,19 @@ _END;
       $n = "$file_name_without_extension.$ext";
       move_uploaded_file($_FILES['userfile']['tmp_name'], $n);
       $text_file_content = file_get_contents($n) or die("Failed to open $n");
-      $text_file_content = strtolower(mysql_entities_fix_string($conn, $text_file_content));
-      $cipher_type = mysql_entities_fix_string($conn, $_POST['ciphertype']);
-      $encrypt_or_decrypt = mysql_entities_fix_string($conn, $_POST['encryptordecrypt']);
+
+      
+      $text_file_content = str_replace(array("\n", "\r"), '', $text_file_content);
+      $cipher_type = $_POST['ciphertype'];
+      $encrypt_or_decrypt = $_POST['encryptordecrypt'];
+      
       $result = "Encrypt/decrypt not successful";
+      $fail = "";
       switch ($cipher_type) {
         case 'substitution':
-          $key =  strtolower(mysql_entities_fix_string($conn, $_POST['key']));
+          $key =  $_POST['key'];
           $fail = validate_sub($key);
-          if ($fail != "") 
-            echo ("<div class='message'><p><a style='color:red'>$fail</a></p></div>");
-          else {
+          if ($fail == "") {
             $alphabet = string_to_alphabet_map(mysql_entities_fix_string($conn, $_POST['key']));
             if ($_POST['encryptordecrypt'] == 'encrypt') {
               $result = substitution_encrypt($text_file_content, $alphabet);
@@ -171,14 +171,13 @@ _END;
           }
           break;
         case 'double transposition':
-          $row_perm = mysql_entities_fix_string($conn, $_POST['rowperm']);
+          $row_perm = $_POST['rowperm'];
           $row_perm = str_replace(' ', '', $row_perm);
-          $col_perm = mysql_entities_fix_string($conn, $_POST['colperm']);
+          $col_perm = $_POST['colperm'];
           $col_perm = str_replace(' ', '', $col_perm);
+          
           $fail = validate_DT($row_perm, $col_perm);
-          if ($fail != "") 
-            echo ("<div class='message'><p><a style='color:red'>$fail</a></p></div>");
-          else {
+          if ($fail == "") {
             if ($_POST['encryptordecrypt'] == 'encrypt') {
               $result = double_transposition_encrypt($text_file_content, $row_perm, $col_perm);
             } else {
@@ -186,34 +185,34 @@ _END;
             }
             echo <<<_END
         <div class="message">
-        <p><a style="color:red">Input:<br>$text_file_content<br>$cipher_type was used to $encrypt_or_decrypt with key: $row_perm and $col_perm</a></p>
+        <p><a style="color:red">Input:<br>$text_file_content<br>$cipher_type was used to $encrypt_or_decrypt with key: Row permuations: ($row_perm) and Column permuations: ($col_perm)</a></p>
             <p>$result</p>
         </div>
 _END;
           }
           break;
         case 'RC4':
-          $key = mysql_entities_fix_string($conn, $_POST['key']);
-          if ($_POST['encryptordecrypt'] == 'encrypt') {
-            $result = RC4($text_file_content, $key);
-          } else {
-            $result = RC4($text_file_content, $key);
-          }
-          echo <<<_END
-      <div class="message">
-          <p><a style="color:red">Input:<br>$text_file_content<br>$cipher_type was used to $encrypt_or_decrypt with key: $key</a></p>
-          <p>$result</p>
-      </div>
+          $key = $_POST['key'];
+          $fail = validate_RC4($key);
+          if ($fail == "") {
+            if ($_POST['encryptordecrypt'] == 'encrypt') {
+              $result = RC4($text_file_content, $key);
+            } else {
+              $result = RC4($text_file_content, $key);
+            }
+            echo <<<_END
+        <div class="message">
+            <p><a style="color:red">Input:<br>$text_file_content<br>$cipher_type was used to $encrypt_or_decrypt with key: $key</a></p>
+            <p>$result</p>
+        </div>
 _END;
+          }
           break;
       }
+      if ($fail != "") 
+        echo ("<div class='message'><p><a style='color:red'>$fail</a></p></div>");
+      $text_file_content = mysql_entities_fix_string($conn, $text_file_content);
       store_content($conn, $_SESSION['username'], $cipher_type, $encrypt_or_decrypt, $text_file_content, $result);
-    } else {
-       echo <<<_END
-  <div class="message">
-  Error! '$file_name_without_extension' is not an accepted text file! Try again!
-  </div>
-_END;
     }
   }
   
