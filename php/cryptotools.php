@@ -23,14 +23,14 @@
   print_r(string_to_alphabet_map("dzprjqnucwtayblshgvmfxekio"));
   */
   
-  
+  /*
   $encryption = RC4("hello world", "12");
   echo $encryption . "<br>";
   $decryption = RC4($encryption, "12");
   echo $decryption . "<br>";
+  */
   
-  
-  //All crypto based functions and helpers
+  //Crypto based functions and helper functions
   
   function string_to_alphabet_map($string) {
     $res_map = array("a" => "a", "b" => "b", "c" => "c", "d" => "d", "e" => "e", "f" => "f",
@@ -62,13 +62,13 @@
     $to_decrypt = str_split($to_decrypt);
     $res = str_repeat(" ", sizeOf($to_decrypt));
     for ($i=0; $i<sizeOf($to_decrypt); $i++) {
-      if ($to_decrypt[$i] != ' ' && $to_decrypt[$i] != null && $alphabet[$to_decrypt[$i]] != null && $alphabet[$to_decrypt[$i]] != ' ') {
+      if ($to_decrypt[$i] != ' ' && $to_decrypt[$i] != null 
+          && isset($alphabet[$to_decrypt[$i]]) && $alphabet[$to_decrypt[$i]] != null && $alphabet[$to_decrypt[$i]] != ' ') {
         $res[$i] = array_search($to_decrypt[$i], $alphabet);
       }
     }
     return $res;
-  }
-  
+  } 
   
   function double_transposition_encrypt($string, $row_perm, $col_perm) {  
     $row_perm = str_replace('(', '', $row_perm);
@@ -229,6 +229,8 @@
     return strtolower($res);
   }
   
+  //Crypto validation
+  
   function validate_sub($key) {  
     $num_characters = 26;
     if (preg_replace('/\s+/', '', $key) == '') return "No alphabet was entered<br>";
@@ -242,6 +244,13 @@
   function validate_DT($row_perm, $col_perm) {  
     if (preg_replace('/\s+/', '', $row_perm) == '') return "No row permutation was entered<br>";
     else if (preg_replace('/\s+/', '', $col_perm) == '') return "No column permutation was entered<br>";
+    return "";
+  }
+  
+  function validate_RC4($key) {  
+    if (preg_replace('/\s+/', '', $key) == '') return "No key was entered<br>";
+    else if (preg_match("/[^a-zA-Z0-9]/", $key))
+      return "Only letters a-z, A-Z, and 0-9 allowed<br>";
     return "";
   }
 ?>

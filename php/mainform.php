@@ -60,8 +60,9 @@ _END;
       && isset($_POST['submitbutton']) && !empty($_POST['textinput']) 
       && !is_uploaded_file($_FILES['userfile']['tmp_name']) 
       && isset($_POST['ciphertype']) && isset($_POST['encryptordecrypt'])) {
-        
+         
       $text_box_input = $_POST['textinput'];
+      $text_box_input = str_replace(array("\n", "\r"), '', $text_box_input);
       $cipher_type = $_POST['ciphertype'];
       $encrypt_or_decrypt = $_POST['encryptordecrypt'];
       
@@ -91,6 +92,7 @@ _END;
           $row_perm = str_replace(' ', '', $row_perm);
           $col_perm = $_POST['colperm'];
           $col_perm = str_replace(' ', '', $col_perm);
+          
           $fail = validate_DT($row_perm, $col_perm);
           if ($fail == "") {
             if ($_POST['encryptordecrypt'] == 'encrypt') {
@@ -108,7 +110,7 @@ _END;
           break;
         case 'RC4':
           $key = $_POST['key'];
-          $fail = validate_RC4($row_perm, $col_perm);
+          $fail = validate_RC4($key);
           if ($fail == "") {
             if ($_POST['encryptordecrypt'] == 'encrypt') {
               $result = RC4($text_box_input, $key);
