@@ -48,7 +48,7 @@ _END;
   } else {
       echo <<<_END
   <div class="message">
-    <p><a style="color:red">Not logged in/Session not valid!</a> Click <a href="loginform.php" style="color:blue">here</a> to login!</p>
+    <p><a style="color:red">Not logged in/Session not valid!</a> Click <a href="loginform.php">here</a> to login!</p>
   </div>
 _END;
   }

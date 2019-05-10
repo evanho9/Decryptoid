@@ -50,7 +50,7 @@ _END;
   } else {
       echo <<<_END
       <div class="message">
-          <p><a style="color:red">Not logged in/Session not valid!</a> Click <a href="loginform.php" style="color:blue">here</a> to login!</p>
+          <p><a style="color:red">Not logged in/Session not valid!</a> Click <a href="loginform.php">here</a> to login!</p>
       </div>
 _END;
   }
@@ -246,7 +246,7 @@ _END;
     Column Permutation: <input id="colperm" name="colperm" placeholder="0,1,2,3" type="text">
     <br><br>
     <input type='radio' name='encryptordecrypt' checked="checked" value='encrypt'>Encrypt
-    <input type='radio' name='encryptordecrypt' value='decrypt'>Decrypt
+    <input type='radio' name='encryptordecrypt' value='decrypt'>Decrypt<br><br>
     <input type='submit' name='submitbutton' value='Submit'><br><br>
     <p><br>
     <b>Simple Substitution Format Example:</b><br>

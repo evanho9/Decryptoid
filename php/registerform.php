@@ -58,7 +58,7 @@ _END;
   //Logged in already logic
   if (isset($_SESSION['loggedin'])) die (<<<_END
       <div class="message">
-          <p><a style="color:red">Already logged in!</a> Click <a href="mainform.php" style="color:blue">here</a> to proceed instead.</p>
+          <p><a style="color:red">Already logged in!</a> Click <a href="mainform.php">here</a> to proceed instead.</p>
           <form method='post' action='loginform.php' accept-charset="UTF-8" enctype='multipart/form-data'>
           or
           <input type='submit' name='logoutbutton' value='Logout'><br>
