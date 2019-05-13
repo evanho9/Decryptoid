@@ -213,6 +213,8 @@ _END;
         echo ("<div class='message'><p><a style='color:red'>$fail</a></p></div>");
       $text_file_content = mysql_entities_fix_string($conn, $text_file_content);
       store_content($conn, $_SESSION['username'], $cipher_type, $encrypt_or_decrypt, $text_file_content, $result);
+    } else {
+      echo ("<div class='message'><p><a style='color:red'>Invalid file type.</a></p></div>");
     }
   }
   
@@ -248,22 +250,25 @@ _END;
     <input type='radio' name='encryptordecrypt' value='decrypt'>Decrypt<br><br>
     <input type='submit' name='submitbutton' value='Submit'><br><br>
     <p><br>
+    <b>General:</b><br>
+    Capitalization and new lines will be ignored.<br>
+    If an input is too large, go to the output in your user page for easier viewing.
+   <br><br>
     <b>Simple Substitution Format Example:</b><br>
     Key: odeykrqbhasngucvwximfjltpz<br>
-    Note: Alphabet must be 26 characters and input should consist of a-z or A-Z only.<br>
-    Capitalization and new lines will be ignored<br><br>
+    Note: Alphabet must be 26 characters and input should consist of a-z or A-Z only.
+    <br><br>
     </p>
     <p>
     <b>Double Transposition Format Example:</b><br>
     Row: 1,0,2<br>
     Column: 2,3,1,0<br>
     Note: Text will be cut off if rows * columns > number of characters to encrypt/decrypt for double transposition.<br> 
-    Whitespace, capitalization, and new lines will be ignored.<br><br>
+    Whitespace will be ignored.<br><br>
     </p>
     <p>
     <b>RC4 Format Example:</b><br>
     Key: c50e93af7db81246<br>
-    Note: Capitalization and new lines will be ignored.
    <br><br>
     </p>
   </form>
