@@ -1,34 +1,4 @@
 <?php
-
-  //Crypto test cases
-  /*
-  $test_alphabet = array("a" => "x", "b" => "y", "c" => "z");
-
-  echo substitution_encrypt("abc", $test_alphabet) . "<br>";
-  
-  echo substitution_decrypt("xyz", $test_alphabet);
-  */
-  
-  /*
-  print "<pre>";
-  print_r(double_transposition_encrypt("hello world i am evan", "(0,2,1,3)", "(0,2,3,1,4)"));
-  print "</pre>";
- 
-  print "<pre>";
-  print_r(double_transposition_decrypt("hlleoimeavwrloda__n_", "(0,2,1,3)", "(0,2,3,1,4)"));
-  print "</pre>";
-  */
-  
-  /*
-  print_r(string_to_alphabet_map("dzprjqnucwtayblshgvmfxekio"));
-  */
-  
-  /*
-  $encryption = RC4("hello world", "12");
-  echo $encryption . "<br>";
-  $decryption = RC4($encryption, "12");
-  echo $decryption . "<br>";
-  */
   
   //Crypto based functions and helper functions
   
