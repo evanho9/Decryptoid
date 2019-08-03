@@ -6,7 +6,7 @@
   function create_database() {
     global $hn, $un, $pw, $db;
     $link = mysqli_connect($hn, $un, $pw);
-    if (!$link) die ('Could not connect: ' . mysql_error());
+    if (!$link) die ('Could not connect: ' . mysqli_error());
     $db_selected = mysqli_select_db($link, $db);
     if (!$db_selected) {
     $sql = "CREATE DATABASE $db";
