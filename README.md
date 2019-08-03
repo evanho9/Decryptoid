@@ -1,6 +1,9 @@
 # Decryptoid
 Web application for encrypting/decrypting using simple substitution, double transposition, and RC4 ciphers.
 
+Try it!
+https://decryptoid.herokuapp.com/php/index.php
+
 Features:
   * Login/registration
   * User history
